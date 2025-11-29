@@ -7,12 +7,6 @@ import { medalView } from "./views/medalView";
 import { shopView } from "./views/shopView";
 import { statsView } from "./views/statsView";
 import { gameView } from "./views/gameView";
-// Registrar todas las vistas disponibles en la aplicación.
-registerView("worlds", worldView);
-registerView("medals", medalView);
-registerView("shop", shopView);
-registerView("stats", statsView);
-registerView("game", gameView);
 
 function setupNavigation() {
   document.addEventListener("click", (event) => {
@@ -23,9 +17,12 @@ function setupNavigation() {
   });
 }
 
-// Registrar vistas
 registerView("main", mainView);
+registerView("worlds", worldView);
+registerView("medals", medalView);
+registerView("shop", shopView);
+registerView("stats", statsView);
+registerView("game", gameView);
 
-// Iniciar
 setupNavigation();
 navigateTo("main");

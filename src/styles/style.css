@@ -1,96 +1,196 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
+/* Fondo general */
 body {
   margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #ffffff; 
+  color: #333;
+}
+
+/* Contenedor principal de cada pantalla */
+.screen {
+  margin: 0;
+  padding: 0;
+}
+
+.screen-frame {
+  background: #ffffff;
+  border: 1px solid #ccc;
+  padding: 12px;
+  box-sizing: border-box;
+  min-height: 100vh; /* ocupa toda la altura visible */
+}
+
+
+/* Marco blanco que imita el wireframe */
+.screen-frame {
+  background: #ffffff;
+  border: 1px solid #ccc;
+  padding: 12px;
+}
+
+/* Fila superior: MONEDA / PUNTOS | MENÚ */
+.top-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.top-box {
+  border: 1px solid #ccc;
+  padding: 8px;
+  font-size: 11px;
+}
+
+/* Zona principal en dos columnas */
+.main-row {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 12px;
+}
+
+/* Columna izquierda */
+.left-panel {
+  border: 1px solid #ccc;
+  padding: 8px;
   display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  flex-direction: column;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+/* Círculos de navegación */
+.nav-circles {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
 }
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+.circle-btn {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  background: #f5f5f5;
+  cursor: pointer;
+}
+
+/* Contenido de la izquierda (lista, progreso, etc.) */
+.left-content {
+  flex: 1;
+  border: 1px solid #ddd;
+  padding: 6px;
+  overflow-y: auto;
+  font-size: 11px;
+}
+
+/* Sección de progreso */
+.stats-progress-header {
+  font-size: 11px;
+  padding: 4px 6px;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 6px;
+}
+
+.stats-worlds-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stats-world-item {
+  border: 1px solid #ccc;
+  padding: 6px;
+}
+
+/* Ejemplo de estilos para la lista de mundos en MAIN */
+.worlds-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.world-item {
+  border: 1px solid #ccc;
+  padding: 6px;
+}
+
+/* Columna derecha: personaje + info */
+.right-panel {
+  border: 1px solid #ccc;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.character-area {
+  flex: 1;
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+}
+
+.player-info {
+  border: 1px solid #ddd;
+  padding: 6px;
+  font-size: 11px;
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vanilla:hover {
-  filter: drop-shadow(0 0 2em #f7df1eaa);
+/* Sección de medallas */
+.medal-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
 }
 
-.card {
-  padding: 2em;
+.medal-slot {
+  border: 1px solid #ccc;
+  padding: 6px;
+  font-size: 10px;
+  text-align: center;
 }
 
-.read-the-docs {
-  color: #888;
+/* Sección de tienda */
+.shop-section-title {
+  font-size: 11px;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 6px;
+  padding-bottom: 4px;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+.shop-items {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.shop-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #ccc;
+  padding: 4px 6px;
+  font-size: 11px;
+}
+
+.shop-buy-btn {
+  font-size: 10px;
+  padding: 2px 6px;
+  border: 1px solid #aaa;
+  background: #f2f2f2;
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+/* Placeholder para el canvas del juego */
+.game-canvas-placeholder {
+  width: 100%;
+  height: 100%;
+  border: 1px dashed #aaa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  text-align: center;
 }
