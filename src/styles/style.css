@@ -34,7 +34,7 @@ body {
   padding: 12px;
 }
 
-/* Fila superior: MONEDA / PUNTOS | MENÚ */
+/* Fila superior: INFORMACIÓN | MENÚ */
 .top-row {
   display: grid;
   grid-template-columns: 1fr 1fr;

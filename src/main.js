@@ -1,14 +1,16 @@
 import "./styles/style.css";
 import { registerView, navigateTo } from "./router.js";
 
-import { mainView } from "./views/mainView"; // vista principal
-import { worldView } from "./views/worldView"; // vista de detalle de mundo
-import { medalView } from "./views/medalView"; // vista de medallas
-import { shopView } from "./views/shopView"; // vista de tienda
-import { statsView } from "./views/statsView"; // vista de estadísticas
-import { gameView } from "./views/gameView"; // vista del juego
-import { shopItemsView } from "./views/shopItemsView"; // importamos la nueva vista
-import { uiState } from "./state/uiState"; // importamos el estado UI
+import { mainView } from "./views/mainView";
+import { worldView } from "./views/worldView";
+import { medalView } from "./views/medalView";
+import { shopView } from "./views/shopView";
+import { shopItemsView } from "./views/shopItemsView";
+import { statsView } from "./views/statsView";
+import { gameView } from "./views/gameView";
+
+import { uiState } from "./state/uiState";
+import { loadGameState, saveGameState } from "./state/persistence";
 
 function setupNavigation() {
   document.addEventListener("click", (event) => {
@@ -53,6 +55,26 @@ registerView("shop", shopView); // vista de tienda
 registerView("shopItems", shopItemsView); // vista de items de tienda
 registerView("stats", statsView); // vista de estadísticas
 registerView("game", gameView); // vista del juego
+
+// Cargar estado desde localStorage
+loadGameState();
+
+// registrar vistas...
+registerView("main", mainView);
+registerView("worldDetail", worldView);
+registerView("medals", medalView);
+registerView("shop", shopView);
+registerView("shopItems", shopItemsView);
+registerView("stats", statsView);
+registerView("game", gameView);
+
+setupNavigation();
+navigateTo("main");
+
+// Guardar automáticamente al cerrar / recargar
+window.addEventListener("beforeunload", () => {
+  saveGameState();
+});
 
 setupNavigation();
 navigateTo("main");
