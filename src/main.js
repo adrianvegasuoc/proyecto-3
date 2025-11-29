@@ -1,18 +1,19 @@
-import './styles/style.css';
-import p5 from 'p5';
+import "./styles/style.css";
+import { registerView, navigateTo } from "./router";
+import { mainView } from "./views/mainView";
 
-const sketch = (p) => {
-  p.setup = () => {
-    const canvas = p.createCanvas(400, 400);
-    // Usamos el div con id="app" como contenedor
-    canvas.parent('app');
-  };
+function setupNavigation() {
+  document.addEventListener("click", (event) => {
+    if (event.target.matches("[data-view]")) {
+      const viewName = event.target.getAttribute("data-view");
+      navigateTo(viewName);
+    }
+  });
+}
 
-  p.draw = () => {
-    p.background(220);
-    p.fill(0);
-    p.circle(p.width / 2, p.height / 2, 80);
-  };
-};
+// Registrar vistas
+registerView("main", mainView);
 
-new p5(sketch);
+// Iniciar
+setupNavigation();
+navigateTo("main");
