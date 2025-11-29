@@ -23,8 +23,6 @@ export function baseLayout({ leftContent, rightContent = "" }) {
             <button class="circle-btn" data-view="shop" title="Tienda"></button>
             <!-- 4) Estadísticas -->
             <button class="circle-btn" data-view="stats" title="Estadísticas"></button>
-            <!-- 5) Reservado / futuro -->
-            <button class="circle-btn" title="Reservado"></button>
             </div>
             <div class="left-content">
               ${leftContent}

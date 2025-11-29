@@ -1,13 +1,14 @@
 import "./styles/style.css";
 import { registerView, navigateTo } from "./router.js";
 
-import { mainView } from "./views/mainView";
-import { worldView } from "./views/worldView";
-import { medalView } from "./views/medalView";
-import { shopView } from "./views/shopView";
-import { statsView } from "./views/statsView";
-import { gameView } from "./views/gameView";
-import { shopItemsView } from "./views/shopItemsView";
+import { mainView } from "./views/mainView"; // vista principal
+import { worldView } from "./views/worldView"; // vista de detalle de mundo
+import { medalView } from "./views/medalView"; // vista de medallas
+import { shopView } from "./views/shopView"; // vista de tienda
+import { statsView } from "./views/statsView"; // vista de estadísticas
+import { gameView } from "./views/gameView"; // vista del juego
+import { shopItemsView } from "./views/shopItemsView"; // importamos la nueva vista
+import { uiState } from "./state/uiState"; // importamos el estado UI
 
 function setupNavigation() {
   document.addEventListener("click", (event) => {
@@ -26,8 +27,8 @@ function setupNavigation() {
 
     // Click en una categoría de tienda (3 TIENDA -> 3 TIENDA OBJETOS)
     if (event.target.matches("[data-shop-section]")) {
-      // En el futuro podremos usar el atributo para saber qué categoría es
-      // const section = event.target.getAttribute("data-shop-section");
+      const section = event.target.getAttribute("data-shop-section");
+      uiState.currentShopSection = section; // guardamos cuál es
       navigateTo("shopItems");
       return;
     }
