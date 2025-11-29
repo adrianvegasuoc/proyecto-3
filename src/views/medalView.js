@@ -15,20 +15,7 @@ export function medalView() {
     </div>
   `;
 
-  const rightContent = `
-    <div class="medal-detail">
-      <p>Detalle de la medalla seleccionada.</p>
-      <p>Más adelante aquí mostraremos:</p>
-      <ul>
-        <li>Nombre de la medalla</li>
-        <li>Descripción</li>
-        <li>Condición de desbloqueo</li>
-      </ul>
-    </div>
-  `;
-
   return baseLayout({
     leftContent,
-    rightContent,
   });
 }

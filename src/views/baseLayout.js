@@ -15,13 +15,17 @@ export function baseLayout({ leftContent, rightContent = "" }) {
         <div class="main-row">
           <aside class="left-panel">
             <div class="nav-circles">
-              <button class="circle-btn" data-view="main" title="Inicio"></button>
-              <button class="circle-btn" data-view="worlds" title="Mundos"></button>
-              <button class="circle-btn" data-view="medals" title="Medallero"></button>
-              <button class="circle-btn" data-view="shop" title="Tienda"></button>
-              <button class="circle-btn" data-view="stats" title="Estadísticas"></button>
+            <!-- 1) Mundos -->
+            <button class="circle-btn" data-view="main" title="Mundos"></button>
+            <!-- 2) Medallero -->
+            <button class="circle-btn" data-view="medals" title="Medallero"></button>
+            <!-- 3) Tienda -->
+            <button class="circle-btn" data-view="shop" title="Tienda"></button>
+            <!-- 4) Estadísticas -->
+            <button class="circle-btn" data-view="stats" title="Estadísticas"></button>
+            <!-- 5) Reservado / futuro -->
+            <button class="circle-btn" title="Reservado"></button>
             </div>
-
             <div class="left-content">
               ${leftContent}
             </div>

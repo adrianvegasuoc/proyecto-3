@@ -8,16 +8,22 @@ body {
 
 /* Contenedor principal de cada pantalla */
 .screen {
-  margin: 0;
-  padding: 0;
+  min-height: 100vh;         /* ocupa toda la altura visible */
+  display: flex;
+  justify-content: center;   /* centrar horizontalmente el marco si lo limitamos */
 }
 
 .screen-frame {
   background: #ffffff;
   border: 1px solid #ccc;
-  padding: 12px;
+  padding: 12px 16px;
   box-sizing: border-box;
-  min-height: 100vh; /* ocupa toda la altura visible */
+  flex: 1;
+
+  max-width: 1280px;         /* opcional: ancho máximo parecido al wireframe */
+  width: 100%;
+  display: flex;
+  flex-direction: column;    /* top-row arriba, main-row debajo */
 }
 
 
@@ -42,11 +48,12 @@ body {
   font-size: 11px;
 }
 
-/* Zona principal en dos columnas */
 .main-row {
   display: grid;
   grid-template-columns: 260px 1fr;
   gap: 12px;
+  flex: 1;                   /* ocupa todo lo que queda bajo la top-row */
+  min-height: 0;             /* evita overflow raro en algunos navegadores */
 }
 
 /* Columna izquierda */
@@ -55,6 +62,7 @@ body {
   padding: 8px;
   display: flex;
   flex-direction: column;
+  min-height: 0;
 }
 
 /* Círculos de navegación */
@@ -73,7 +81,7 @@ body {
   cursor: pointer;
 }
 
-/* Contenido de la izquierda (lista, progreso, etc.) */
+/* Contenido de la izquierda */
 .left-content {
   flex: 1;
   border: 1px solid #ddd;
@@ -109,16 +117,23 @@ body {
 }
 
 .world-item {
+  width: 100%;
+  text-align: left;
   border: 1px solid #ccc;
   padding: 6px;
+  font-size: 11px;
+  background: #f8f8f8;
+  cursor: pointer;
 }
 
-/* Columna derecha: personaje + info */
+
+/* Columna derecha */
 .right-panel {
   border: 1px solid #ccc;
   padding: 8px;
   display: flex;
   flex-direction: column;
+  min-height: 0;
 }
 
 .character-area {
@@ -160,27 +175,56 @@ body {
   padding-bottom: 4px;
 }
 
-.shop-items {
+/* 3 TIENDA: lista de categorías grandes */
+.shop-main-list {
   display: flex;
   flex-direction: column;
+  gap: 6px;
+}
+
+.shop-main-category {
+  width: 100%;
+  text-align: left;
+  border: 1px solid #ccc;
+  padding: 12px;
+  font-size: 11px;
+  background: #f8f8f8;
+  cursor: pointer;
+}
+
+/* 3 TIENDA OBJETOS PERSONAJE */
+.shop-items-view {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.shop-items-header {
+  font-size: 11px;
+  padding: 6px;
+  border: 1px solid #ccc;
+  margin-bottom: 4px;
+  text-align: center;
+}
+
+.shop-items-scroll {
+  flex: 1;
+  border: 1px solid #ccc;
+  padding: 4px;
+  overflow-y: auto;
+}
+
+.shop-items-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 4px;
 }
 
-.shop-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.shop-item-card {
   border: 1px solid #ccc;
-  padding: 4px 6px;
-  font-size: 11px;
-}
-
-.shop-buy-btn {
+  padding: 6px;
   font-size: 10px;
-  padding: 2px 6px;
-  border: 1px solid #aaa;
-  background: #f2f2f2;
-  cursor: pointer;
+  text-align: center;
 }
 
 /* Placeholder para el canvas del juego */
@@ -193,4 +237,46 @@ body {
   justify-content: center;
   font-size: 11px;
   text-align: center;
+}
+
+/* Detalles del mundo seleccionado */
+.world-detail-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.world-detail-title {
+  font-size: 11px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.world-level {
+  border: 1px solid #ccc;
+  padding: 6px;
+  font-size: 11px;
+}
+
+.world-detail-right {
+  font-size: 11px;
+}
+
+.world-play-btn {
+  margin-top: 10px;
+  padding: 6px 10px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+
+/* Responsive: para pantallas más pequeñas */
+@media (max-width: 900px) {
+  .main-row {
+    grid-template-columns: 1fr;  /* columnas apiladas */
+  }
+
+  .left-panel {
+    margin-bottom: 12px;
+  }
 }

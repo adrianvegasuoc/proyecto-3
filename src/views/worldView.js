@@ -2,22 +2,22 @@ import { baseLayout } from "./baseLayout";
 
 export function worldView() {
   const leftContent = `
-    <div class="worlds-list">
-      <div class="world-item">MUNDO CULTURA DIGITAL · NIVEL 1</div>
-      <div class="world-item">MUNDO CULTURA DIGITAL · NIVEL 2</div>
-      <div class="world-item">MUNDO CULTURA DIGITAL · NIVEL 3</div>
-      <div class="world-item">MUNDO CULTURA DIGITAL · NIVEL 4</div>
+    <div class="world-detail-list">
+      <div class="world-detail-title">MUNDO CULTURA DIGITAL</div>
+      <div class="world-level">Nivel 1</div>
+      <div class="world-level">Nivel 2</div>
+      <div class="world-level">Nivel 3</div>
+      <div class="world-level">Nivel 4</div>
     </div>
   `;
 
   const rightContent = `
-    <div class="world-detail">
-      <p>Aquí mostraremos el detalle del mundo seleccionado:</p>
-      <ul>
-        <li>Descripción del mundo</li>
-        <li>Retos disponibles</li>
-        <li>Progreso en este mundo</li>
-      </ul>
+    <div class="world-detail-right">
+      <p>Aquí mostraremos el detalle del mundo seleccionado.</p>
+      <p>Por ejemplo, descripción general, progreso y botón de jugar:</p>
+      <button class="world-play-btn" data-view="game">
+        JUGAR MUNDO CULTURA DIGITAL · NIVEL 1
+      </button>
     </div>
   `;
 
