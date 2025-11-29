@@ -1,28 +1,42 @@
 import { baseLayout } from "./baseLayout";
+import { uiState } from "../state/uiState";
+
+const worldTitles = {
+  digital: "MUNDO CULTURA DIGITAL",
+  html: "MUNDO HTML",
+  css: "MUNDO CSS",
+  logica: "MUNDO LÓGICA",
+};
 
 export function worldView() {
+  const title = worldTitles[uiState.currentWorld] || "MUNDO";
+
   const leftContent = `
     <div class="world-detail-list">
-      <div class="world-detail-title">MUNDO CULTURA DIGITAL</div>
-      <div class="world-level">Nivel 1</div>
-      <div class="world-level">Nivel 2</div>
-      <div class="world-level">Nivel 3</div>
-      <div class="world-level">Nivel 4</div>
+      <div class="world-detail-title">${title}</div>
+      <button class="world-level-btn" data-world-level="1">Nivel 1</button>
+      <button class="world-level-btn" data-world-level="2">Nivel 2</button>
+      <button class="world-level-btn" data-world-level="3">Nivel 3</button>
+      <button class="world-level-btn" data-world-level="4">Nivel 4</button>
     </div>
   `;
 
-  const rightContent = `
-    <div class="world-detail-right">
-      <p>Aquí mostraremos el detalle del mundo seleccionado.</p>
-      <p>Por ejemplo, descripción general, progreso y botón de jugar:</p>
-      <button class="world-play-btn" data-view="game">
-        JUGAR MUNDO CULTURA DIGITAL · NIVEL 1
-      </button>
-    </div>
-  `;
+  // Construimos la configuración para baseLayout
+  const config = { leftContent };
 
-  return baseLayout({
-    leftContent,
-    rightContent,
-  });
+  // SOLO cuando hay nivel seleccionado cambiamos el contenido de la derecha
+  if (uiState.currentLevel) {
+    config.rightContent = `
+      <div class="world-detail-right">
+        <p><strong>${title}</strong></p>
+        <p>NIVEL ${uiState.currentLevel}</p>
+        <button class="world-play-btn" data-view="game">
+          JUGAR
+        </button>
+      </div>
+    `;
+  }
+  // Si no hay nivel, no ponemos rightContent → baseLayout usa "ESPACIO DE PERSONAJE"
+
+  return baseLayout(config);
 }

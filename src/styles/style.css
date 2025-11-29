@@ -252,10 +252,21 @@ body {
   margin-bottom: 4px;
 }
 
-.world-level {
+.world-level-btn {
+  width: 100%;
+  text-align: left;
   border: 1px solid #ccc;
   padding: 6px;
   font-size: 11px;
+  background: #f8f8f8;
+  cursor: pointer;
+}
+
+.world-selection-info {
+  margin-top: 8px;
+  font-size: 10px;
+  border-top: 1px solid #eee;
+  padding-top: 6px;
 }
 
 .world-detail-right {

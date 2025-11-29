@@ -7,7 +7,7 @@ export function medalView() {
         .map(
           (_, i) => `
         <div class="medal-slot">
-          MEDALLA ${i + 1}
+          M_${i + 1}
         </div>
       `
         )
