@@ -153,9 +153,30 @@ body {
 
 .player-info {
   border: 1px solid #ddd;
-  padding: 6px;
+  padding: 6px 10px;
   font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 2px;
+}
+
+.player-name {
+  flex: 1;
   text-align: center;
+}
+
+.player-edit-btn {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  background: #f8f8f8;
+  font-size: 11px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Sección de medallas */
@@ -295,6 +316,51 @@ body {
   cursor: pointer;
 }
 
+/* Bloque de edición de perfil */
+.profile-edit {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  height: 100%;
+}
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.profile-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 11px;
+}
+
+.profile-field input {
+  padding: 6px;
+  border: 1px solid #ccc;
+  font-size: 11px;
+}
+
+.profile-btn {
+  padding: 8px;
+  border: 1px solid #ccc;
+  background: #f8f8f8;
+  font-size: 11px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.profile-btn[disabled] {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.profile-preview {
+  border: 1px solid #ddd;
+}
+
 
 /* Responsive: para pantallas más pequeñas */
 @media (max-width: 900px) {
@@ -330,4 +396,3 @@ body {
   font-size: 12px;
   cursor: pointer;
 }
-

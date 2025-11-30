@@ -8,11 +8,18 @@ import { shopView } from "./views/shopView";
 import { shopItemsView } from "./views/shopItemsView";
 import { statsView } from "./views/statsView";
 import { gameView } from "./views/gameView";
-import { menuOverlayView } from "./views/menuOverlayView";
+import { menuOverlayView } from "./views/menuOverlayView.js";
+import { profileEditView } from "./views/profileEditView.js";
 
 import { uiState } from "./state/uiState";
 import { loadGameState, saveGameState } from "./state/persistence";
-import { addCoins, completeLevel, getState } from "./state/state";
+import {
+  addCoins,
+  completeLevel,
+  getState,
+  resetState,
+  setPlayerName,
+} from "./state/state";
 
 // Navegar a una vista específica y actualizar el estado UI
 function goTo(viewName) {
@@ -85,12 +92,38 @@ function setupNavigation() {
     // Abrir MENÚ
     if (event.target.matches('[data-action="open-menu"]')) {
       uiState.returnView = uiState.currentView; // guardar de dónde venimos
-      navigateTo("menuOverlay"); // 👈 NO usamos goTo
+      navigateTo("menuOverlay");
       return;
     }
 
     // Cerrar MENÚ (volver a donde estábamos)
     if (event.target.matches('[data-action="close-menu"]')) {
+      const targetView = uiState.returnView || "main";
+      goTo(targetView);
+      return;
+    }
+
+    // Abrir editor de perfil (botón "E")
+    if (event.target.matches('[data-action="open-profile-edit"]')) {
+      uiState.returnView = uiState.currentView || "main";
+      navigateTo("profileEdit"); // overlay lógico, no usamos goTo
+      return;
+    }
+
+    // Guardar perfil (solo nombre de momento)
+    if (event.target.matches('[data-action="save-profile"]')) {
+      const input = document.getElementById("profile-name-input");
+      if (input) {
+        setPlayerName(input.value);
+        saveGameState();
+      }
+      const targetView = uiState.returnView || "main";
+      goTo(targetView);
+      return;
+    }
+
+    // Cancelar edición de perfil
+    if (event.target.matches('[data-action="cancel-profile"]')) {
       const targetView = uiState.returnView || "main";
       goTo(targetView);
       return;
@@ -106,6 +139,7 @@ registerView("shopItems", shopItemsView); // vista de items de tienda
 registerView("stats", statsView); // vista de estadísticas
 registerView("game", gameView); // vista del juego
 registerView("menuOverlay", menuOverlayView); // vista de menú
+registerView("profileEdit", profileEditView); // vista de edición de perfil
 
 // Cargar estado desde localStorage
 loadGameState();

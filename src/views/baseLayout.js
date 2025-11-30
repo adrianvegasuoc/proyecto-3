@@ -3,6 +3,7 @@ import { getState } from "../state/state";
 export function baseLayout({ leftContent, rightContent = "" }) {
   const state = getState();
   const coins = state?.currency?.coins ?? 0;
+  const playerName = state?.player?.name || "NUEVO JUGADOR";
 
   return `
     <div class="screen">
@@ -40,7 +41,8 @@ export function baseLayout({ leftContent, rightContent = "" }) {
               ${rightContent || "<p>ESPACIO DE PERSONAJE</p>"}
             </div>
             <div class="player-info">
-              INFORMACIÓN PERSONAL (NOMBRE, NIVEL)
+                <span class="player-name">${playerName}</span>
+                <button class="player-edit-btn" data-action="open-profile-edit">E</button>
             </div>
           </section>
 
