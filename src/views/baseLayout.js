@@ -1,15 +1,20 @@
+import { getState } from "../state/state";
+
 export function baseLayout({ leftContent, rightContent = "" }) {
+  const state = getState();
+  const coins = state?.currency?.coins ?? 0;
+
   return `
     <div class="screen">
       <div class="screen-frame">
 
         <div class="top-row">
-          <div class="top-box top-box-left">
-            INFORMACIÓN GENERAL
-          </div>
-          <div class="top-box top-box-right">
-            MENÚ
-          </div>
+            <div class="top-box top-box-left">
+                MONEDAS: ${coins}
+            </div>
+            <div class="top-box top-box-right" data-action="open-menu">
+                MENÚ
+            </div>
         </div>
         
         <div class="main-row">

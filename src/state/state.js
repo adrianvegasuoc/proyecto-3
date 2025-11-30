@@ -1,8 +1,11 @@
 const DEFAULT_STATE = {
   player: {
-    name: "Jugador",
+    name: "NUEVO JUGADOR",
     level: 1,
     experience: 0,
+  },
+  currency: {
+    coins: 0,
   },
   worlds: [
     {
@@ -57,4 +60,35 @@ export function replaceState(newState) {
 
 export function resetState() {
   state = cloneDefault();
+}
+
+// Helpers sencillos que usaremos luego
+export function addCoins(amount) {
+  state.currency.coins += amount;
+  if (state.currency.coins < 0) state.currency.coins = 0;
+}
+
+// Marca un nivel como completado en un mundo
+export function completeLevel(worldId, level) {
+  const numericLevel = Number(level);
+  const world = state.worlds.find((w) => w.id === worldId);
+  if (!world) return;
+
+  if (!world.completedLevels.includes(numericLevel)) {
+    world.completedLevels.push(numericLevel);
+  }
+
+  state.stats.totalGames += 1;
+  state.stats.totalWins += 1;
+}
+
+// Actualiza el nombre del jugador
+export function setPlayerName(name) {
+  state.player.name = name && name.trim() ? name.trim() : "NUEVO JUGADOR";
+}
+
+// Actualiza experiencia al jugador
+export function addExperience(amount) {
+  state.player.experience += amount;
+  // Lógica para subir de nivel si se alcanza cierto umbral
 }
