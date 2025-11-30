@@ -18,7 +18,6 @@ export function mainView() {
     </div>
   `;
 
-  // De momento usamos el espacio de personaje por defecto
   return baseLayout({
     leftContent,
   });

@@ -1,5 +1,6 @@
 import { baseLayout } from "./baseLayout";
 import { uiState } from "../state/uiState";
+import { getState } from "../state/state";
 
 const worldTitles = {
   digital: "MUNDO CULTURA DIGITAL",
@@ -9,34 +10,72 @@ const worldTitles = {
 };
 
 export function worldView() {
-  const title = worldTitles[uiState.currentWorld] || "MUNDO";
+  const state = getState();
+
+  const worldId = uiState.currentWorld;
+  const currentLevel = uiState.currentLevel;
+
+  const world = state.worlds.find((w) => w.id === worldId);
+
+  // ➜ Comprobamos que existe el mundo
+  if (!world) {
+    return baseLayout({
+      leftContent: `<p>Error: mundo no encontrado (${worldId})</p>`,
+    });
+  }
+
+  const title = worldTitles[worldId] || "MUNDO";
+
+  // Niveles completados
+  const completed = world.completedLevels || [];
+
+  // Generador de botones de nivel
+  function levelButton(levelNumber) {
+    const isCompleted = completed.includes(levelNumber);
+    const isCurrent = String(levelNumber) === String(currentLevel);
+
+    const classes = [
+      "world-level-btn",
+      isCompleted ? "is-completed" : "",
+      isCurrent ? "is-current" : "",
+    ]
+      .filter(Boolean)
+      .join(" ");
+
+    const label = `Nivel ${levelNumber}${isCompleted ? " ✓" : ""}`;
+
+    return `
+      <button class="${classes}" data-world-level="${levelNumber}">
+        ${label}
+      </button>
+    `;
+  }
 
   const leftContent = `
     <div class="world-detail-list">
       <div class="world-detail-title">${title}</div>
-      <button class="world-level-btn" data-world-level="1">Nivel 1</button>
-      <button class="world-level-btn" data-world-level="2">Nivel 2</button>
-      <button class="world-level-btn" data-world-level="3">Nivel 3</button>
-      <button class="world-level-btn" data-world-level="4">Nivel 4</button>
+      ${levelButton(1)}
+      ${levelButton(2)}
+      ${levelButton(3)}
+      ${levelButton(4)}
     </div>
   `;
 
-  // Construimos la configuración para baseLayout
+  // Si NO hay nivel seleccionado → no modificamos rightContent (mostrará ESPACIO PERSONAJE)
   const config = { leftContent };
 
-  // SOLO cuando hay nivel seleccionado cambiamos el contenido de la derecha
-  if (uiState.currentLevel) {
+  // Si HAY nivel seleccionado → mostramos panel de nivel
+  if (currentLevel) {
     config.rightContent = `
       <div class="world-detail-right">
         <p><strong>${title}</strong></p>
-        <p>NIVEL ${uiState.currentLevel}</p>
+        <p>NIVEL ${currentLevel}</p>
         <button class="world-play-btn" data-view="game">
           JUGAR
         </button>
       </div>
     `;
   }
-  // Si no hay nivel, no ponemos rightContent → baseLayout usa "ESPACIO DE PERSONAJE"
 
   return baseLayout(config);
 }

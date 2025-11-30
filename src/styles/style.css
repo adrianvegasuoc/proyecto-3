@@ -106,12 +106,35 @@ body {
 .stats-worlds-list {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
 }
 
 .stats-world-item {
   border: 1px solid #ccc;
   padding: 6px;
+  font-size: 11px;
+}
+
+.stats-world-name {
+  font-weight: bold;
+  margin-bottom: 2px;
+}
+
+.stats-world-info {
+  font-size: 10px;
+  margin-bottom: 4px;
+}
+
+.stats-world-bar {
+  width: 100%;
+  height: 8px;
+  border: 1px solid #ccc;
+  background: #f8f8f8;
+}
+
+.stats-world-bar-fill {
+  height: 100%;
+  background: #82c482;
 }
 
 /* Ejemplo de estilos para la lista de mundos en MAIN */
@@ -296,6 +319,15 @@ body {
   font-size: 11px;
   background: #f8f8f8;
   cursor: pointer;
+}
+
+.world-level-btn.is-completed {
+  background: #e6ffe6;
+  border-color: #82c482;
+}
+
+.world-level-btn.is-current {
+  outline: 2px solid #4a90e2;
 }
 
 .world-selection-info {
