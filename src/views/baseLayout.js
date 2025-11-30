@@ -42,7 +42,7 @@ export function baseLayout({ leftContent, rightContent = "" }) {
             </div>
             <div class="player-info">
                 <span class="player-name">${playerName}</span>
-                <button class="player-edit-btn" data-action="open-profile-edit">E</button>
+                <button class="player-edit-btn" data-action="open-profile-edit">Editar</button>
             </div>
           </section>
 

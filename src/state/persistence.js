@@ -1,4 +1,9 @@
-import { getState, replaceState, resetState } from "./state";
+import {
+  getState,
+  replaceState,
+  resetState,
+  recalculateAllAchievements,
+} from "./state";
 
 const STORAGE_KEY = "proyecto3-game-state";
 
@@ -9,8 +14,12 @@ export function loadGameState() {
       resetState();
       return;
     }
+
     const parsed = JSON.parse(raw);
     replaceState(parsed);
+
+    // Recalcular logros con el estado cargado
+    recalculateAllAchievements();
   } catch (e) {
     console.error("Error cargando estado, reseteando...", e);
     resetState();

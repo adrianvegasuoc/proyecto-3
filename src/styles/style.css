@@ -211,9 +211,35 @@ body {
 
 .medal-slot {
   border: 1px solid #ccc;
-  padding: 6px;
   font-size: 10px;
   text-align: center;
+  height: 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 4px;
+  box-sizing: border-box;
+}
+
+.medal-slot.is-unlocked {
+  background: #ffeaa7;
+  border-color: #f39c12;
+}
+
+.medal-slot.is-locked {
+  background: #f4f4f4;
+  color: #999;
+}
+
+.medal-main {
+  font-weight: bold;
+  margin-bottom: 2px;
+}
+
+.medal-detail {
+  font-size: 9px;
+  line-height: 1.1;
 }
 
 /* Sección de tienda */
