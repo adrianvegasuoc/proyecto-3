@@ -10,6 +10,7 @@ import { statsView } from "./views/statsView";
 import { gameView } from "./views/gameView";
 import { menuOverlayView } from "./views/menuOverlayView.js";
 import { profileEditView } from "./views/profileEditView.js";
+import * as digitalLevel1Game from "./games/digitalLevel1Game"; // importación del juego
 
 import { uiState } from "./state/uiState";
 import { loadGameState, saveGameState } from "./state/persistence";
@@ -25,110 +26,146 @@ import {
 function goTo(viewName) {
   uiState.currentView = viewName;
   navigateTo(viewName);
+
+  if (viewName === "game") {
+    initCurrentGame();
+  } else {
+    // Si salimos de la vista de juego, paramos timers del minijuego
+    digitalLevel1Game.stopDigitalLevel1();
+  }
 }
 
 function setupNavigation() {
   document.addEventListener("click", (event) => {
-    // Navegación general (círculos, botones con data-view)
-    if (event.target.matches("[data-view]")) {
-      const viewName = event.target.getAttribute("data-view");
-      navigateTo(viewName);
+    const target = event.target; // 👈 MUY IMPORTANTE
+
+    // Navegación general por vistas (círculos, etc.)
+    if (target.matches("[data-view]")) {
+      const viewName = target.getAttribute("data-view");
+      goTo(viewName);
       return;
     }
 
-    // Click en un mundo (1 MAIN -> 1 DETALLE MUNDO)
-    if (event.target.matches("[data-world]")) {
-      const worldKey = event.target.getAttribute("data-world");
-      uiState.currentWorld = worldKey; // guardamos mundo
-      uiState.currentLevel = null; // aún no hay nivel
-      goTo("worldDetail"); // vista de niveles
+    // Selección de mundo
+    if (target.matches("[data-world]")) {
+      const worldKey = target.getAttribute("data-world");
+      uiState.currentWorld = worldKey;
+      uiState.currentLevel = null;
+      goTo("worldDetail");
       return;
     }
 
-    // Click en un nivel dentro de un mundo
-    if (event.target.matches("[data-world-level]")) {
-      const level = event.target.getAttribute("data-world-level");
-      uiState.currentLevel = level; // guardamos nivel
-      goTo("worldDetail"); // re-render con derecha actualizada
+    // Selección de nivel dentro del mundo
+    if (target.matches("[data-world-level]")) {
+      const level = target.getAttribute("data-world-level");
+      uiState.currentLevel = level;
+      goTo("worldDetail");
       return;
     }
 
-    // Click en una categoría de tienda
-    if (event.target.matches("[data-shop-section]")) {
-      const section = event.target.getAttribute("data-shop-section");
+    // Tienda: secciones
+    if (target.matches("[data-shop-section]")) {
+      const section = target.getAttribute("data-shop-section");
       uiState.currentShopSection = section;
       goTo("shopItems");
       return;
     }
 
-    // Botón de prueba: sumar 10 monedas
-    if (event.target.matches('[data-action="add-test-coins"]')) {
-      addCoins(10); // sumamos 10 monedas al estado
-      saveGameState(); // guardamos en LocalStorage
-      goTo("game"); // recargamos la vista de juego para refrescar el layout
+    // Abrir MENÚ superior
+    if (target.matches('[data-action="open-menu"]')) {
+      uiState.returnView = uiState.currentView;
+      navigateTo("menuOverlay"); // overlay -> NO goTo
       return;
     }
 
-    // Simular victoria en un nivel (vista Juego)
-    if (event.target.matches('[data-action="win-level"]')) {
-      const worldId = uiState.currentWorld;
-      const level = uiState.currentLevel;
-
-      if (!worldId || !level) {
-        // Por seguridad: si faltan datos, no hacemos nada
-        return;
-      }
-
-      // Recompensa fija de ejemplo: 20 monedas
-      addCoins(20);
-      completeLevel(worldId, level);
-      saveGameState();
-
-      // Volvemos al detalle del mundo para seguir jugando otros niveles
-      goTo("worldDetail");
+    // Cerrar MENÚ superior
+    if (target.matches('[data-action="close-menu"]')) {
+      const back = uiState.returnView || "main";
+      goTo(back);
       return;
     }
 
-    // Abrir MENÚ
-    if (event.target.matches('[data-action="open-menu"]')) {
-      uiState.returnView = uiState.currentView; // guardar de dónde venimos
-      navigateTo("menuOverlay");
-      return;
-    }
-
-    // Cerrar MENÚ (volver a donde estábamos)
-    if (event.target.matches('[data-action="close-menu"]')) {
-      const targetView = uiState.returnView || "main";
-      goTo(targetView);
-      return;
-    }
-
-    // Abrir editor de perfil (botón "E")
-    if (event.target.matches('[data-action="open-profile-edit"]')) {
+    // Abrir editor de perfil
+    if (target.matches('[data-action="open-profile-edit"]')) {
       uiState.returnView = uiState.currentView || "main";
-      navigateTo("profileEdit"); // overlay lógico, no usamos goTo
+      navigateTo("profileEdit"); // overlay -> NO goTo
       return;
     }
 
-    // Guardar perfil (solo nombre de momento)
-    if (event.target.matches('[data-action="save-profile"]')) {
+    // Guardar perfil (nombre)
+    if (target.matches('[data-action="save-profile"]')) {
       const input = document.getElementById("profile-name-input");
       if (input) {
         setPlayerName(input.value);
         saveGameState();
       }
-      const targetView = uiState.returnView || "main";
-      goTo(targetView);
+      const back = uiState.returnView || "main";
+      goTo(back);
       return;
     }
 
     // Cancelar edición de perfil
-    if (event.target.matches('[data-action="cancel-profile"]')) {
-      const targetView = uiState.returnView || "main";
-      goTo(targetView);
+    if (target.matches('[data-action="cancel-profile"]')) {
+      const back = uiState.returnView || "main";
+      goTo(back);
+      return;
+    }
+
+    // Simular victoria genérica (niveles "próximamente")
+    if (target.matches('[data-action="win-level"]')) {
+      const worldId = uiState.currentWorld;
+      const level = uiState.currentLevel;
+      if (!worldId || !level) return;
+
+      addCoins(20);
+      completeLevel(worldId, level);
+      saveGameState();
+      goTo("worldDetail");
+      return;
+    }
+
+    // ---- Minijuego Digital Nivel 1 ----
+
+    // Elegir FIABLE / DUDOSO (ratón)
+    const digitalChoiceNode = target.closest('[data-action="digital-choice"]');
+    if (digitalChoiceNode) {
+      const choice = digitalChoiceNode.getAttribute("data-choice"); // 'reliable' / 'doubtful'
+      const root = document.getElementById("digital-game-panel");
+      if (root) {
+        digitalLevel1Game.handleDigitalChoice(choice, root);
+      }
+      return;
+    }
+
+    const restartNode = target.closest('[data-action="digital-restart"]');
+    if (restartNode) {
+      const root = document.getElementById("digital-game-panel");
+      if (root) {
+        digitalLevel1Game.restartDigitalLevel1(root);
+      }
+      return;
+    }
+
+    const exitNode = target.closest('[data-action="digital-exit"]');
+    if (exitNode) {
+      digitalLevel1Game.stopDigitalLevel1();
+      goTo("worldDetail");
       return;
     }
   });
+}
+
+// Inicializar el juego actual según uiState
+function initCurrentGame() {
+  const worldId = uiState.currentWorld;
+  const level = uiState.currentLevel;
+
+  if (worldId === "digital" && String(level) === "1") {
+    const root = document.getElementById("digital-game-panel");
+    if (root) {
+      digitalLevel1Game.startDigitalLevel1(root);
+    }
+  }
 }
 
 registerView("main", mainView);
