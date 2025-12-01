@@ -39,9 +39,9 @@ function goTo(viewName) {
 
 function setupNavigation() {
   document.addEventListener("click", (event) => {
-    const target = event.target; //
+    const target = event.target;
 
-    // Navegación general por vistas (círculos, etc.)
+    // Navegación general por vistas
     if (target.matches("[data-view]")) {
       const viewName = target.getAttribute("data-view");
       goTo(viewName);
@@ -57,7 +57,7 @@ function setupNavigation() {
       return;
     }
 
-    // Selección de nivel dentro del mundo
+    // Selección de nivel
     if (target.matches("[data-world-level]")) {
       const level = target.getAttribute("data-world-level");
       uiState.currentLevel = level;
@@ -65,7 +65,7 @@ function setupNavigation() {
       return;
     }
 
-    // Tienda: secciones
+    // Tienda
     if (target.matches("[data-shop-section]")) {
       const section = target.getAttribute("data-shop-section");
       uiState.currentShopSection = section;
@@ -73,28 +73,26 @@ function setupNavigation() {
       return;
     }
 
-    // Abrir MENÚ superior
+    // Menú superior
     if (target.matches('[data-action="open-menu"]')) {
       uiState.returnView = uiState.currentView;
-      navigateTo("menuOverlay"); // overlay -> NO goTo
+      navigateTo("menuOverlay");
       return;
     }
 
-    // Cerrar MENÚ superior
     if (target.matches('[data-action="close-menu"]')) {
       const back = uiState.returnView || "main";
       goTo(back);
       return;
     }
 
-    // Abrir editor de perfil
+    // Perfil
     if (target.matches('[data-action="open-profile-edit"]')) {
       uiState.returnView = uiState.currentView || "main";
-      navigateTo("profileEdit"); // overlay -> NO goTo
+      navigateTo("profileEdit");
       return;
     }
 
-    // Guardar perfil (nombre)
     if (target.matches('[data-action="save-profile"]')) {
       const input = document.getElementById("profile-name-input");
       if (input) {
@@ -106,14 +104,13 @@ function setupNavigation() {
       return;
     }
 
-    // Cancelar edición de perfil
     if (target.matches('[data-action="cancel-profile"]')) {
       const back = uiState.returnView || "main";
       goTo(back);
       return;
     }
 
-    // Simular victoria genérica (niveles "próximamente")
+    // Simular victoria genérica (niveles futuros)
     if (target.matches('[data-action="win-level"]')) {
       const worldId = uiState.currentWorld;
       const level = uiState.currentLevel;
@@ -126,19 +123,20 @@ function setupNavigation() {
       return;
     }
 
-    // Minijuego Digital Nivel 1
+    // ---------- Minijuego Digital Nivel 1 ----------
 
-    // Elegir FIABLE / DUDOSO
+    // FIABLE / DUDOSO
     const digitalChoiceNode = target.closest('[data-action="digital-choice"]');
     if (digitalChoiceNode) {
-      const choice = digitalChoiceNode.getAttribute("data-choice"); // "fiable" o "dudoso"
+      const choice = digitalChoiceNode.getAttribute("data-choice"); // 'reliable' / 'doubtful'
       const root = document.getElementById("digital-game-panel");
       if (root) {
-        digitalLevel1Game.handleDigitalChoice(choice, root); // manejar elección
+        digitalLevel1Game.handleDigitalChoice(choice, root);
       }
       return;
     }
 
+    // REPETIR NIVEL
     const restartNode = target.closest('[data-action="digital-restart"]');
     if (restartNode) {
       const root = document.getElementById("digital-game-panel");
@@ -148,6 +146,7 @@ function setupNavigation() {
       return;
     }
 
+    // VOLVER AL MUNDO
     const exitNode = target.closest('[data-action="digital-exit"]');
     if (exitNode) {
       digitalLevel1Game.stopDigitalLevel1();
@@ -199,6 +198,3 @@ goTo("main");
 window.addEventListener("beforeunload", () => {
   saveGameState();
 });
-
-setupNavigation();
-navigateTo("main");

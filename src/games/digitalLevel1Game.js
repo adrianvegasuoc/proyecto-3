@@ -213,37 +213,39 @@ export function renderDigitalLevel1(rootElement) {
     const current = gameState.headlines[gameState.currentIndex];
 
     rootElement.innerHTML = `
-      <div class="digital-game">
-        <div class="digital-header-row">
-          <span>PUNTOS: ${gameState.score} / ${gameState.targetScore}</span>
-          <span>INTENTOS: ${gameState.attempts} / ${gameState.maxAttempts}</span>
-          <span>TIEMPO: <span data-role="digital-timer">${gameState.timeLeft}s</span></span>
-        </div>
+    <div class="digital-game">
+      <div class="digital-header-row">
+        <span>PUNTOS: ${gameState.score} / ${gameState.targetScore}</span>
+        <span>INTENTOS: ${gameState.attempts} / ${gameState.maxAttempts}</span>
+        <span>TIEMPO: <span data-role="digital-timer">${gameState.timeLeft}s</span></span>
+      </div>
 
+      <div class="digital-main-row">
         <div class="digital-main-card">
           <p>${current.text}</p>
         </div>
-
-        <div class="digital-bottom-bar">
-          <button
-            type="button"
-            class="digital-bottom-btn"
-            data-action="digital-choice"
-            data-choice="reliable"
-          >
-            FIABLE
-          </button>
-          <button
-            type="button"
-            class="digital-bottom-btn"
-            data-action="digital-choice"
-            data-choice="doubtful"
-          >
-            DUDOSO
-          </button>
-        </div>
       </div>
-    `;
+
+      <div class="digital-bottom-bar">
+        <button
+          type="button"
+          class="digital-bottom-btn"
+          data-action="digital-choice"
+          data-choice="reliable"
+        >
+          FIABLE
+        </button>
+        <button
+          type="button"
+          class="digital-bottom-btn"
+          data-action="digital-choice"
+          data-choice="doubtful"
+        >
+          DUDOSO
+        </button>
+      </div>
+    </div>
+  `;
   } else {
     let mainMessage = "";
     let subMessage = "";
@@ -273,34 +275,34 @@ export function renderDigitalLevel1(rootElement) {
         : gameState.wrongAnswers
             .map(
               (w) => `
-          <p class="digital-correction">
-            ✖ <strong>${w.text}</strong><br/>
-            Tu respuesta: ${w.playerLabel} · Respuesta correcta: ${w.correctLabel}<br/>
-            <span class="digital-correction-expl">${w.explanation}</span>
-          </p>
-        `
+        <p class="digital-correction">
+          ✖ <strong>${w.text}</strong><br/>
+          Tu respuesta: ${w.playerLabel} · Respuesta correcta: ${w.correctLabel}<br/>
+          <span class="digital-correction-expl">${w.explanation}</span>
+        </p>
+      `
             )
             .join("");
 
     rootElement.innerHTML = `
-      <div class="digital-end-screen">
-        <div class="digital-end-card">
-          <h3>${mainMessage}</h3>
-          <p>${subMessage}</p>
-          <div class="digital-corrections">
-            ${correctionsHtml}
-          </div>
-        </div>
-
-        <div class="digital-end-actions">
-          <button data-action="digital-restart" class="digital-end-btn">
-            REPETIR NIVEL
-          </button>
-          <button data-action="digital-exit" class="digital-end-btn">
-            VOLVER AL MUNDO
-          </button>
-        </div>
+  <div class="digital-end-screen">
+    <div class="digital-end-card">
+      <h3>${mainMessage}</h3>
+      <p>${subMessage}</p>
+      <div class="digital-corrections">
+        ${correctionsHtml}
       </div>
-    `;
+    </div>
+
+    <div class="digital-end-actions">
+      <button data-action="digital-restart" class="digital-end-btn">
+        REPETIR NIVEL
+      </button>
+      <button data-action="digital-exit" class="digital-end-btn">
+        VOLVER AL MUNDO
+      </button>
+    </div>
+  </div>
+`;
   }
 }
