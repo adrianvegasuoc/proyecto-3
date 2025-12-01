@@ -24,20 +24,22 @@ import {
 
 // Navegar a una vista específica y actualizar el estado UI
 function goTo(viewName) {
+  // Si salimos de la vista de juego, apagamos el minijuego
+  if (uiState.currentView === "game" && viewName !== "game") {
+    digitalLevel1Game.stopDigitalLevel1();
+  }
+
   uiState.currentView = viewName;
   navigateTo(viewName);
 
   if (viewName === "game") {
     initCurrentGame();
-  } else {
-    // Si salimos de la vista de juego, paramos timers del minijuego
-    digitalLevel1Game.stopDigitalLevel1();
   }
 }
 
 function setupNavigation() {
   document.addEventListener("click", (event) => {
-    const target = event.target; // 👈 MUY IMPORTANTE
+    const target = event.target; //
 
     // Navegación general por vistas (círculos, etc.)
     if (target.matches("[data-view]")) {
@@ -124,15 +126,15 @@ function setupNavigation() {
       return;
     }
 
-    // ---- Minijuego Digital Nivel 1 ----
+    // Minijuego Digital Nivel 1
 
-    // Elegir FIABLE / DUDOSO (ratón)
+    // Elegir FIABLE / DUDOSO
     const digitalChoiceNode = target.closest('[data-action="digital-choice"]');
     if (digitalChoiceNode) {
-      const choice = digitalChoiceNode.getAttribute("data-choice"); // 'reliable' / 'doubtful'
+      const choice = digitalChoiceNode.getAttribute("data-choice"); // "fiable" o "dudoso"
       const root = document.getElementById("digital-game-panel");
       if (root) {
-        digitalLevel1Game.handleDigitalChoice(choice, root);
+        digitalLevel1Game.handleDigitalChoice(choice, root); // manejar elección
       }
       return;
     }

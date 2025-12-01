@@ -75,9 +75,10 @@ const HEADLINES = [
 const MAX_ATTEMPTS = 10;
 const TARGET_SCORE = 50; // 5 aciertos x 10 puntos
 const POINTS_PER_HIT = 10;
-const TOTAL_TIME = 180; // segundos de partida
+const TOTAL_TIME = 180; // 3 minutos
 
 let gameState = null;
+let timerId = null;
 
 // -------- Helpers internos --------
 
@@ -94,7 +95,6 @@ function createInitialState() {
     maxAttempts: MAX_ATTEMPTS,
     targetScore: TARGET_SCORE,
     timeLeft: TOTAL_TIME,
-    timerId: null,
     finished: false,
     success: false,
     finishReason: null, // 'target', 'attempts', 'time'
@@ -102,10 +102,34 @@ function createInitialState() {
   };
 }
 
-function clearTimer() {
-  if (gameState && gameState.timerId !== null) {
-    clearInterval(gameState.timerId);
-    gameState.timerId = null;
+function startTimer(rootElement) {
+  // por si acaso hubiera uno antiguo
+  if (timerId) {
+    clearInterval(timerId);
+    timerId = null;
+  }
+
+  timerId = setInterval(() => {
+    if (!gameState || gameState.finished) return;
+
+    gameState.timeLeft -= 1;
+    if (gameState.timeLeft <= 0) {
+      gameState.timeLeft = 0;
+      endGame("time");
+      renderDigitalLevel1(rootElement);
+    } else {
+      const timeNode = rootElement.querySelector("[data-role='digital-timer']");
+      if (timeNode) {
+        timeNode.textContent = `${gameState.timeLeft}s`;
+      }
+    }
+  }, 1000);
+}
+
+function stopTimer() {
+  if (timerId) {
+    clearInterval(timerId);
+    timerId = null;
   }
 }
 
@@ -113,7 +137,7 @@ function endGame(reason) {
   if (!gameState || gameState.finished) return;
   gameState.finished = true;
   gameState.finishReason = reason;
-  clearTimer();
+  stopTimer();
 
   if (gameState.score >= gameState.targetScore) {
     gameState.success = true;
@@ -127,33 +151,23 @@ function endGame(reason) {
   }
 }
 
+// -------- API pública del minijuego --------
+
 export function startDigitalLevel1(rootElement) {
-  // Siempre que entramos, empezamos partida nueva
   gameState = createInitialState();
-
-  // Timer
-  gameState.timerId = setInterval(() => {
-    if (!gameState) return;
-    gameState.timeLeft -= 1;
-    if (gameState.timeLeft <= 0) {
-      gameState.timeLeft = 0;
-      endGame("time");
-      renderDigitalLevel1(rootElement);
-    } else {
-      // refrescamos solo numeritos
-      const timeNode = rootElement.querySelector("[data-role='digital-timer']");
-      if (timeNode) {
-        timeNode.textContent = `${gameState.timeLeft}s`;
-      }
-    }
-  }, 1000);
-
+  startTimer(rootElement);
   renderDigitalLevel1(rootElement);
 }
 
 export function stopDigitalLevel1() {
-  clearTimer();
+  stopTimer();
   gameState = null;
+}
+
+export function restartDigitalLevel1(rootElement) {
+  gameState = createInitialState();
+  startTimer(rootElement);
+  renderDigitalLevel1(rootElement);
 }
 
 export function handleDigitalChoice(choice, rootElement) {
@@ -178,37 +192,14 @@ export function handleDigitalChoice(choice, rootElement) {
     });
   }
 
-  // Condiciones de fin
   if (gameState.score >= gameState.targetScore) {
     endGame("target");
   } else if (gameState.attempts >= gameState.maxAttempts) {
     endGame("attempts");
   } else {
-    // siguiente titular
     gameState.currentIndex =
       (gameState.currentIndex + 1) % gameState.headlines.length;
   }
-
-  renderDigitalLevel1(rootElement);
-}
-
-export function restartDigitalLevel1(rootElement) {
-  clearTimer();
-  gameState = createInitialState();
-  gameState.timerId = setInterval(() => {
-    if (!gameState) return;
-    gameState.timeLeft -= 1;
-    if (gameState.timeLeft <= 0) {
-      gameState.timeLeft = 0;
-      endGame("time");
-      renderDigitalLevel1(rootElement);
-    } else {
-      const timeNode = rootElement.querySelector("[data-role='digital-timer']");
-      if (timeNode) {
-        timeNode.textContent = `${gameState.timeLeft}s`;
-      }
-    }
-  }, 1000);
 
   renderDigitalLevel1(rootElement);
 }
@@ -254,7 +245,6 @@ export function renderDigitalLevel1(rootElement) {
       </div>
     `;
   } else {
-    // Vista final (como tu wireframe)
     let mainMessage = "";
     let subMessage = "";
 
