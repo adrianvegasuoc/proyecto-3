@@ -15,28 +15,37 @@ export function gameView() {
   const worldTitle = worldTitles[worldId] || "MUNDO";
   const levelText = level ? `NIVEL ${level}` : "SIN NIVEL SELECCIONADO";
 
-  const isDigitalL1 = worldId === "digital" && String(level) === "1";
+  const isDigitalPlayable =
+    worldId === "digital" && (String(level) === "1" || String(level) === "2");
 
-  if (isDigitalL1) {
-    // Nivel 1 Cultura Digital -> minijuego real
+  if (isDigitalPlayable) {
+    const levelNumber = String(level);
+
     const leftContent = `
-      <div class="world-level-info">
-        <div class="world-level-title">${worldTitle}</div>
-        <div class="world-level-subtitle">NIVEL ${level}</div>
-        <div class="world-level-separator">— —</div>
-        <div class="world-level-description">
-          Detecta noticias dudosas: lee el titular y decide si es Fiable o Dudoso.<br />
-          Cada acierto vale 10 puntos.<br />
-          Consigue 50 puntos en 10 intentos antes de que se agote el tiempo.
-        </div>
+    <div class="world-level-info">
+      <div class="world-level-title">${worldTitle}</div>
+      <div class="world-level-subtitle">NIVEL ${levelNumber}</div>
+      <div class="world-level-separator">— —</div>
+      <div class="world-level-description">
+        ${
+          levelNumber === "1"
+            ? `Detecta noticias dudosas: lee el titular y decide si es <strong>Fiable</strong> o <strong>Dudoso</strong>.<br />
+               Cada acierto vale 10 puntos.<br />
+               Consigue 50 puntos en 10 intentos antes de que se agote el tiempo.`
+            : `Nivel intermedio: hay más titulares y algunos son <strong>ambiguos</strong> (clickbait, exageraciones).<br />
+               Mantén la calma, piensa en la fuente y decide si es <strong>Fiable</strong> o <strong>Dudoso</strong>.<br />
+               Cada acierto vale 10 puntos.<br />
+               Consigue 60 puntos en 10 intentos antes de que se agote el tiempo.`
+        }
       </div>
-    `;
+    </div>
+  `;
 
     const rightContent = `
-      <div class="digital-game-root">
-        <div id="digital-game-panel"></div>
-      </div>
-    `;
+    <div class="digital-game-root">
+      <div id="digital-game-panel"></div>
+    </div>
+  `;
 
     return baseLayout({ leftContent, rightContent });
   }
