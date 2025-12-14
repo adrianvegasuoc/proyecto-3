@@ -57,7 +57,6 @@ export function worldView() {
       ${levelButton(1)}
       ${levelButton(2)}
       ${levelButton(3)}
-      ${levelButton(4)}
     </div>
   `;
 

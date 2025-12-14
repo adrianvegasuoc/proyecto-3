@@ -11,13 +11,13 @@ const DEFAULT_STATE = {
     {
       id: "digital",
       name: "MUNDO CULTURA DIGITAL",
-      levels: 4,
+      levels: 3,
       completedLevels: [],
     },
     {
       id: "html",
       name: "MUNDO HTML",
-      levels: 4,
+      levels: 3,
       completedLevels: [],
     },
     {
@@ -74,15 +74,6 @@ const ACHIEVEMENTS_CATALOG = [
     name: "Mundo Cultura Digital - Nivel 3",
     short: "Digital N3",
     description: "Completa el Nivel 3 de Mundo Cultura Digital.",
-  },
-  {
-    id: "digital_lvl4",
-    type: "level",
-    worldId: "digital",
-    level: 4,
-    name: "Mundo Cultura Digital - Nivel 4",
-    short: "Digital N4",
-    description: "Completa el Nivel 4 de Mundo Cultura Digital.",
   },
 
   // Mundo HTML

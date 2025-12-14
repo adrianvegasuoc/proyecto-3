@@ -16,7 +16,8 @@ export function gameView() {
   const levelText = level ? `NIVEL ${level}` : "SIN NIVEL SELECCIONADO";
 
   const isDigitalPlayable =
-    worldId === "digital" && (String(level) === "1" || String(level) === "2");
+    worldId === "digital" &&
+    (String(level) === "1" || String(level) === "2" || String(level) === "3");
 
   if (isDigitalPlayable) {
     const levelNumber = String(level);
@@ -26,17 +27,20 @@ export function gameView() {
       <div class="world-level-title">${worldTitle}</div>
       <div class="world-level-subtitle">NIVEL ${levelNumber}</div>
       <div class="world-level-separator">— —</div>
-      <div class="world-level-description">
-        ${
-          levelNumber === "1"
-            ? `Detecta noticias dudosas: lee el titular y decide si es <strong>Fiable</strong> o <strong>Dudoso</strong>.<br />
-               Cada acierto vale 10 puntos.<br />
-               Consigue 50 puntos en 10 intentos antes de que se agote el tiempo.`
-            : `Nivel intermedio: hay más titulares y algunos son <strong>ambiguos</strong> (clickbait, exageraciones).<br />
-               Mantén la calma, piensa en la fuente y decide si es <strong>Fiable</strong> o <strong>Dudoso</strong>.<br />
-               Cada acierto vale 10 puntos.<br />
-               Consigue 60 puntos en 10 intentos antes de que se agote el tiempo.`
-        }
+          <div class="world-level-description">
+      ${
+        levelNumber === "1"
+          ? `Detecta noticias dudosas: lee el titular y decide si es <strong>Fiable</strong> o <strong>Dudoso</strong>.<br />
+             Cada acierto vale 10 puntos.<br />
+             Consigue 50 puntos en 10 intentos antes de que se agote el tiempo.`
+          : levelNumber === "2"
+          ? `Nivel intermedio: aparecen titulares ambiguos y clickbait.<br />
+             Analiza bien la información antes de decidir si es <strong>Fiable</strong> o <strong>Dudoso</strong>.<br />
+             Consigue 50 puntos en 10 intentos.`
+          : `Nivel avanzado: el tiempo es limitado y los errores penalizan.<br />
+             Cada fallo resta puntos.<br />
+             Mantén la concentración y decide si la noticia es <strong>Fiable</strong> o <strong>Dudoso</strong>.`
+      }
       </div>
     </div>
   `;

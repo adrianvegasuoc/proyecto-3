@@ -12,6 +12,7 @@ import { menuOverlayView } from "./views/menuOverlayView.js";
 import { profileEditView } from "./views/profileEditView.js";
 import * as digitalLevel1Game from "./games/digitalLevel1Game"; // importación del juego Digital Nivel 1
 import * as digitalLevel2Game from "./games/digitalLevel2Game"; // importación del juego Digital Nivel 2
+import * as digitalLevel3Game from "./games/digitalLevel3Game"; // importación del juego Digital Nivel 3
 
 import { uiState } from "./state/uiState";
 import { loadGameState, saveGameState } from "./state/persistence";
@@ -126,10 +127,10 @@ function setupNavigation() {
     }
 
     // ---------- Minijuegos Mundo Digital ----------
-    // Manejo de elecciones en juegos digitales
+    // Elección en juego digital
     const digitalChoiceNode = target.closest('[data-action="digital-choice"]');
     if (digitalChoiceNode) {
-      const choice = digitalChoiceNode.getAttribute("data-choice"); // 'reliable' / 'doubtful'
+      const choice = digitalChoiceNode.getAttribute("data-choice");
       const root = document.getElementById("digital-game-panel");
       if (!root) return;
 
@@ -138,11 +139,13 @@ function setupNavigation() {
         digitalLevel1Game.handleDigitalChoice(choice, root);
       } else if (level === "2") {
         digitalLevel2Game.handleDigitalLevel2Choice(choice, root);
+      } else if (level === "3") {
+        digitalLevel3Game.handleDigitalLevel3Choice(choice, root);
       }
       return;
     }
 
-    // Reiniciar o salir del juego digital
+    // Reiniciar el juego digital
     const restartNode = target.closest('[data-action="digital-restart"]');
     if (restartNode) {
       const root = document.getElementById("digital-game-panel");
@@ -153,6 +156,8 @@ function setupNavigation() {
         digitalLevel1Game.restartDigitalLevel1(root);
       } else if (level === "2") {
         digitalLevel2Game.restartDigitalLevel2(root);
+      } else if (level === "3") {
+        digitalLevel3Game.restartDigitalLevel3(root);
       }
       return;
     }
@@ -162,6 +167,7 @@ function setupNavigation() {
     if (exitNode) {
       digitalLevel1Game.stopDigitalLevel1();
       digitalLevel2Game.stopDigitalLevel2();
+      digitalLevel3Game.stopDigitalLevel3();
       goTo("worldDetail");
       return;
     }
@@ -173,22 +179,22 @@ function initCurrentGame() {
   const worldId = uiState.currentWorld;
   const level = String(uiState.currentLevel || "");
 
-  // Solo minijuegos reales en Cultura Digital N1 y N2
-  if (worldId === "digital") {
-    const root = document.getElementById("digital-game-panel");
-    if (!root) return;
+  if (worldId !== "digital") return;
 
-    if (level === "1") {
-      digitalLevel2Game.stopDigitalLevel2(); // por si acaso
-      digitalLevel1Game.startDigitalLevel1(root);
-      return;
-    }
+  const root = document.getElementById("digital-game-panel");
+  if (!root) return;
 
-    if (level === "2") {
-      digitalLevel1Game.stopDigitalLevel1(); // por si acaso
-      digitalLevel2Game.startDigitalLevel2(root);
-      return;
-    }
+  // Apagamos cualquier otro nivel por seguridad
+  digitalLevel1Game.stopDigitalLevel1();
+  digitalLevel2Game.stopDigitalLevel2();
+  digitalLevel3Game.stopDigitalLevel3();
+
+  if (level === "1") {
+    digitalLevel1Game.startDigitalLevel1(root);
+  } else if (level === "2") {
+    digitalLevel2Game.startDigitalLevel2(root);
+  } else if (level === "3") {
+    digitalLevel3Game.startDigitalLevel3(root);
   }
 }
 
