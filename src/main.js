@@ -18,6 +18,7 @@ import { uiState } from "./state/uiState";
 import { loadGameState, saveGameState } from "./state/persistence";
 import {
   addCoins,
+  buyShopItem,
   completeLevel,
   getState,
   resetState,
@@ -73,6 +74,23 @@ function setupNavigation() {
       const section = target.getAttribute("data-shop-section");
       uiState.currentShopSection = section;
       goTo("shopItems");
+      return;
+    }
+
+    const buyButton = target.closest('[data-action="buy-item"]');
+    if (buyButton) {
+      const itemId = buyButton.getAttribute("data-item-id");
+      if (!itemId) return;
+
+      const result = buyShopItem(itemId);
+      if (result?.success) {
+        goTo(uiState.currentView || "shopItems");
+      } else {
+        if (result?.reason === "NO_COINS") {
+          window.alert("No tienes suficientes monedas.");
+        }
+        console.warn("Compra no disponible:", result?.reason || "unknown");
+      }
       return;
     }
 

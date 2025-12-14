@@ -1,8 +1,13 @@
+import { SHOP_ITEMS } from "../data/shopCatalog";
+import { saveGameState } from "./persistence";
+
 const DEFAULT_STATE = {
   player: {
     name: "NUEVO JUGADOR",
     level: 1,
     experience: 0,
+    coins: 0,
+    inventory: [],
   },
   currency: {
     coins: 0,
@@ -34,9 +39,6 @@ const DEFAULT_STATE = {
     },
   ],
   achievements: [], // ids desbloqueados
-  shop: {
-    ownedItems: [],
-  },
   stats: {
     totalGames: 0,
     totalWins: 0,
@@ -371,29 +373,111 @@ const ACHIEVEMENTS_CATALOG = [
 ];
 
 let state = cloneDefault();
+ensurePlayerEconomy();
 
 function cloneDefault() {
   return JSON.parse(JSON.stringify(DEFAULT_STATE));
 }
 
 export function getState() {
+  ensurePlayerEconomy();
   return state;
 }
 
 export function replaceState(newState) {
   state = newState;
+  ensurePlayerEconomy();
 }
 
 export function resetState() {
   state = cloneDefault();
+  ensurePlayerEconomy();
+}
+
+function ensurePlayerEconomy() {
+  if (!state.player || typeof state.player !== "object") {
+    state.player = {
+      name: "NUEVO JUGADOR",
+      level: 1,
+      experience: 0,
+      coins: 0,
+      inventory: [],
+    };
+  }
+
+  if (typeof state.player.coins !== "number") {
+    const legacyCoins =
+      typeof state.currency?.coins === "number" ? state.currency.coins : 0;
+    state.player.coins = legacyCoins;
+  }
+
+  if (!Array.isArray(state.player.inventory)) {
+    const legacyInventory =
+      state.shop && Array.isArray(state.shop.ownedItems)
+        ? state.shop.ownedItems
+        : [];
+    state.player.inventory = legacyInventory;
+  }
+
+  if (!state.currency || typeof state.currency !== "object") {
+    state.currency = { coins: state.player.coins || 0 };
+  } else {
+    state.currency.coins =
+      typeof state.player.coins === "number" ? state.player.coins : 0;
+  }
+}
+
+function setCoins(newTotal) {
+  ensurePlayerEconomy();
+  const sanitized = Math.max(0, Number(newTotal) || 0);
+  state.currency.coins = sanitized;
+  state.player.coins = sanitized;
+}
+
+function getCurrentCoins() {
+  if (typeof state.player?.coins === "number") return state.player.coins;
+  if (typeof state.currency?.coins === "number") return state.currency.coins;
+  return 0;
 }
 
 // Helpers sencillos que usaremos luego
 export function addCoins(amount) {
-  state.currency.coins += amount;
-  if (state.currency.coins < 0) state.currency.coins = 0;
+  const delta = Number(amount) || 0;
+  const total = getCurrentCoins() + delta;
+  setCoins(total);
 
   checkAchievementsAfterCoins();
+}
+
+export function buyShopItem(itemId) {
+  ensurePlayerEconomy();
+  const item = SHOP_ITEMS.find((entry) => entry.id === itemId);
+  if (!item) {
+    return { success: false, reason: "NOT_FOUND" };
+  }
+
+  if (item.status !== "available") {
+    return { success: false, reason: "LOCKED" };
+  }
+
+  if (!Array.isArray(state.player.inventory)) {
+    state.player.inventory = [];
+  }
+
+  if (state.player.inventory.includes(itemId)) {
+    return { success: false, reason: "OWNED" };
+  }
+
+  const coins = getCurrentCoins();
+  if (coins < item.price) {
+    return { success: false, reason: "NO_COINS" };
+  }
+
+  setCoins(coins - item.price);
+  state.player.inventory.push(itemId);
+  saveGameState();
+
+  return { success: true };
 }
 
 // Marca un nivel como completado
@@ -451,7 +535,7 @@ function checkAchievementsAfterLevel(worldId) {
 
 // Comprobar y desbloquear logros tras añadir monedas
 function checkAchievementsAfterCoins() {
-  const coins = state.currency.coins;
+  const coins = getCurrentCoins();
 
   ACHIEVEMENTS_CATALOG.forEach((ach) => {
     if (ach.type === "coins" && coins >= ach.threshold) {

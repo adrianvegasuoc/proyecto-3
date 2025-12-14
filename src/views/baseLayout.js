@@ -2,7 +2,7 @@ import { getState } from "../state/state";
 
 export function baseLayout({ leftContent, rightContent = "" }) {
   const state = getState();
-  const coins = state?.currency?.coins ?? 0;
+  const coins = state?.player?.coins ?? state?.currency?.coins ?? 0;
   const playerName = state?.player?.name || "NUEVO JUGADOR";
 
   return `
