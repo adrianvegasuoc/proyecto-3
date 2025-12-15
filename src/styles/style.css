@@ -11,16 +11,16 @@ body {
   min-height: 100vh;         /* ocupa toda la altura visible */
   display: flex;
   justify-content: center;   /* centrar horizontalmente el marco si lo limitamos */
+  background: #241715;
 }
 
 .screen-frame {
   background: #ffffff;
   border: 1px solid #ccc;
-  padding: 12px 16px;
+  padding: 20px 28px;
   box-sizing: border-box;
   flex: 1;
-
-  max-width: 1280px;         /* opcional: ancho máximo parecido al wireframe */
+  max-width: 1500px;
   width: 100%;
   display: flex;
   flex-direction: column;    /* top-row arriba, main-row debajo */
@@ -29,7 +29,7 @@ body {
 
 /* Marco blanco que imita el wireframe */
 .screen-frame {
-  background: #ffffff;
+  background: #FFF1D0;
   border: 1px solid #ccc;
   padding: 12px;
 }
@@ -55,8 +55,8 @@ body {
 
 .main-row {
   display: grid;
-  grid-template-columns: 260px 1fr;
-  gap: 12px;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 20px;
   flex: 1;                   /* ocupa todo lo que queda bajo la top-row */
   min-height: 0;             /* evita overflow raro en algunos navegadores */
 }
@@ -70,20 +70,48 @@ body {
   min-height: 0;
 }
 
-/* Círculos de navegación */
+/* Navegación de acciones */
 .nav-circles {
   display: flex;
-  gap: 8px;
-  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
 }
 
-.circle-btn {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  border: 1px solid #ccc;
-  background: #f5f5f5;
+.action-btn {
+  border: none;
+  background: transparent;
+  padding: 8px 12px;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 110px;
+}
+
+.action-btn__icon {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  transition: transform 120ms ease;
+}
+
+.action-btn__label {
+  font-size: 11px;
+  color: #111;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.action-btn:hover .action-btn__icon {
+  transform: translateY(-1px);
+}
+
+.action-btn:active .action-btn__icon {
+  transform: translateY(0);
 }
 
 /* Contenido de la izquierda */
@@ -999,4 +1027,32 @@ body {
   font-size: 10px;
   line-height: 1.3;
   margin-bottom: 8px;
+}
+.profile-simple {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+}
+
+.profile-simple--top {
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.profile-simple .profile-field {
+  width: 100%;
+  max-width: 360px;
+}
+
+.profile-simple .profile-field input {
+  width: 100%;
+}
+
+.profile-simple-actions {
+  display: flex;
+  gap: 12px;
 }

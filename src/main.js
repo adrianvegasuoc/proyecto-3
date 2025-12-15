@@ -71,8 +71,9 @@ function setupNavigation() {
     const target = event.target;
 
     // Navegación general por vistas
-    if (target.matches("[data-view]")) {
-      const viewName = target.getAttribute("data-view");
+    const viewButton = target.closest("[data-view]");
+    if (viewButton) {
+      const viewName = viewButton.getAttribute("data-view");
       goTo(viewName);
       return;
     }
@@ -136,13 +137,6 @@ function setupNavigation() {
     if (target.matches('[data-action="close-menu"]')) {
       const back = uiState.returnView || "main";
       goTo(back);
-      return;
-    }
-
-    // Perfil
-    if (target.matches('[data-action="open-profile-edit"]')) {
-      uiState.returnView = uiState.currentView || "main";
-      navigateTo("profileEdit");
       return;
     }
 

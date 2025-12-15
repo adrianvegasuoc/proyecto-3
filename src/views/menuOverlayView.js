@@ -16,8 +16,8 @@ export function menuOverlayView() {
           </div>
         </div>
 
-    <div class="menu-overlay-content">
-          <button class="menu-option-btn" data-action="open-profile-edit">
+        <div class="menu-overlay-content">
+          <button class="menu-option-btn" data-view="profileEdit">
             MI PERFIL
           </button>
           <button class="menu-option-btn" data-action="close-menu">

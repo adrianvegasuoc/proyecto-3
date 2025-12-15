@@ -30,7 +30,9 @@ export function baseLayout({ leftContent, rightContent = "" }) {
     </div>
   `;
   const hasCustomRightContent = Boolean(rightContent);
-  const panelContent = hasCustomRightContent ? rightContent : defaultRightContent;
+  const panelContent = hasCustomRightContent
+    ? rightContent
+    : defaultRightContent;
   const rightPanelClass = hasCustomRightContent ? "is-custom" : "is-default";
 
   return `
@@ -49,14 +51,38 @@ export function baseLayout({ leftContent, rightContent = "" }) {
         <div class="main-row">
           <aside class="left-panel">
             <div class="nav-circles">
-              <!-- 1) Mundos -->
-              <button class="circle-btn" data-view="main" title="Mundos"></button>
-              <!-- 2) Medallero -->
-              <button class="circle-btn" data-view="medals" title="Medallero"></button>
-              <!-- 3) Tienda -->
-              <button class="circle-btn" data-view="shop" title="Tienda"></button>
-              <!-- 4) Estadísticas -->
-              <button class="circle-btn" data-view="stats" title="Estadísticas"></button>
+              <button class="action-btn" data-view="main" title="Jugar">
+                <img
+                  class="action-btn__icon"
+                  src="/assets/menu/menu_game.png"
+                  alt="Jugar"
+                />
+                <span class="action-btn__label">JUGAR</span>
+              </button>
+              <button class="action-btn" data-view="medals" title="Medallero">
+                <img
+                  class="action-btn__icon"
+                  src="/assets/menu/menu_star.png"
+                  alt="Medallero"
+                />
+                <span class="action-btn__label">MEDALLERO</span>
+              </button>
+              <button class="action-btn" data-view="shop" title="Tienda">
+                <img
+                  class="action-btn__icon"
+                  src="/assets/menu/menu_coin.png"
+                  alt="Tienda"
+                />
+                <span class="action-btn__label">TIENDA</span>
+              </button>
+              <button class="action-btn" data-view="stats" title="Estadísticas">
+                <img
+                  class="action-btn__icon"
+                  src="/assets/menu/menu_stats.png"
+                  alt="Estadísticas"
+                />
+                <span class="action-btn__label">ESTADÍSTICAS</span>
+              </button>
             </div>
 
             <div class="left-content">
@@ -70,7 +96,6 @@ export function baseLayout({ leftContent, rightContent = "" }) {
             </div>
             <div class="player-info">
                 <span class="player-name">${playerName}</span>
-                <button class="player-edit-btn" data-action="open-profile-edit">Editar</button>
             </div>
           </section>
 
