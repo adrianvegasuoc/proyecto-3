@@ -306,6 +306,10 @@ body {
   background-image: url("/assets/shop/player/player_3.png");
 }
 
+.player-tier-4 {
+  background-image: url("/assets/shop/player/player_4.png");
+}
+
 .player-info {
   border: 1px solid #ddd;
   padding: 6px 10px;

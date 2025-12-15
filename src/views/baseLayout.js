@@ -1,6 +1,7 @@
 import { getState } from "../state/state";
 
 const MAX_EXTERIOR_TIER = 14;
+const MAX_PLAYER_TIER_VISUAL = 4;
 
 export function baseLayout({ leftContent, rightContent = "" }) {
   const state = getState();
@@ -9,7 +10,10 @@ export function baseLayout({ leftContent, rightContent = "" }) {
   const cosmetics = state?.player?.cosmetics || {};
   const playerStyle = Math.max(1, cosmetics.playerStyleLevel || 1);
   const exteriorStyle = Math.max(1, cosmetics.exteriorStyleLevel || 1);
-  const playerTierClass = `player-tier-${Math.min(playerStyle, 3)}`;
+  const playerTierClass = `player-tier-${Math.min(
+    playerStyle,
+    MAX_PLAYER_TIER_VISUAL
+  )}`;
   const exteriorTierClass = `bg-tier-${Math.min(
     exteriorStyle,
     MAX_EXTERIOR_TIER

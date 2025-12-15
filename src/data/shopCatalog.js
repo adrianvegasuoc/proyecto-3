@@ -32,41 +32,31 @@ const exteriorItems = EXTERIOR_WORLDS.flatMap(
     })
 );
 
-const characterItems = [
-  {
-    id: "char_tier1",
-    category: "personaje",
-    tier: 1,
-    name: "Explorador Base",
-    price: 0,
-    status: "available",
-    slot: "full",
-    visualClass: "shop-visual-character",
-    visualAsset: "/assets/shop/player/player_1.png",
-  },
-  {
-    id: "char_tier2",
-    category: "personaje",
-    tier: 2,
-    name: "Analista Urbano",
-    price: 90,
-    status: "available",
-    slot: "full",
-    visualClass: "shop-visual-character",
-    visualAsset: "/assets/shop/player/player_2.png",
-  },
-  {
-    id: "char_tier3",
-    category: "personaje",
-    tier: 3,
-    name: "Centinela Holo",
-    price: 140,
-    status: "available",
-    slot: "full",
-    visualClass: "shop-visual-character",
-    visualAsset: "/assets/shop/player/player_3.png",
-  },
+const CHARACTER_ITEMS_DEFINITION = [
+  { tier: 2, name: "Silla nivel 1", price: 120, assetIndex: 2, locked: false },
+  { tier: 3, name: "Mesa nivel 1", price: 180, assetIndex: 3, locked: false },
+  { tier: 4, name: "Pantalla nivel 1", price: 240, assetIndex: 4, locked: false },
+  { tier: 5, name: "Chaqueta roja", price: 320, assetIndex: 4, locked: true },
+  { tier: 6, name: "Pantalón chandal", price: 360, assetIndex: 4, locked: true },
+  { tier: 7, name: "Silla nivel 2", price: 400, assetIndex: 4, locked: true },
+  { tier: 8, name: "Mesa nivel 2", price: 440, assetIndex: 4, locked: true },
+  { tier: 9, name: "Pantalla nivel 2", price: 480, assetIndex: 4, locked: true },
+  { tier: 10, name: "Chanqueta capucha", price: 520, assetIndex: 4, locked: true },
 ];
+
+const characterItems = CHARACTER_ITEMS_DEFINITION.map(
+  ({ tier, name, price, assetIndex, locked }) => ({
+    id: `char_tier${tier}`,
+    category: "personaje",
+    tier,
+    name,
+    price,
+    status: locked ? "locked" : "available",
+    slot: "full",
+    visualClass: "shop-visual-character",
+    visualAsset: `/assets/shop/player/player_${assetIndex}.png`,
+  })
+);
 
 const upgradeItems = [
   {
