@@ -1,6 +1,11 @@
 import { SHOP_ITEMS } from "../data/shopCatalog";
 import { saveGameState } from "./persistence";
 
+const DEFAULT_COSMETICS = {
+  playerStyleLevel: 1,
+  exteriorStyleLevel: 1,
+};
+
 const DEFAULT_STATE = {
   player: {
     name: "NUEVO JUGADOR",
@@ -8,6 +13,7 @@ const DEFAULT_STATE = {
     experience: 0,
     coins: 0,
     inventory: [],
+    cosmetics: { ...DEFAULT_COSMETICS },
   },
   currency: {
     coins: 0,
@@ -28,13 +34,13 @@ const DEFAULT_STATE = {
     {
       id: "css",
       name: "MUNDO CSS",
-      levels: 4,
+      levels: 3,
       completedLevels: [],
     },
     {
       id: "logica",
       name: "MUNDO LÓGICA",
-      levels: 4,
+      levels: 3,
       completedLevels: [],
     },
   ],
@@ -402,6 +408,7 @@ function ensurePlayerEconomy() {
       experience: 0,
       coins: 0,
       inventory: [],
+      cosmetics: { ...DEFAULT_COSMETICS },
     };
   }
 
@@ -419,12 +426,25 @@ function ensurePlayerEconomy() {
     state.player.inventory = legacyInventory;
   }
 
+  if (!state.player.cosmetics || typeof state.player.cosmetics !== "object") {
+    state.player.cosmetics = { ...DEFAULT_COSMETICS };
+  } else {
+    const cosmetics = state.player.cosmetics;
+    cosmetics.playerStyleLevel = normalizeTier(cosmetics.playerStyleLevel);
+    cosmetics.exteriorStyleLevel = normalizeTier(cosmetics.exteriorStyleLevel);
+  }
+
   if (!state.currency || typeof state.currency !== "object") {
     state.currency = { coins: state.player.coins || 0 };
   } else {
     state.currency.coins =
       typeof state.player.coins === "number" ? state.player.coins : 0;
   }
+}
+
+function normalizeTier(value) {
+  const numeric = Number(value);
+  return Number.isFinite(numeric) && numeric >= 1 ? Math.floor(numeric) : 1;
 }
 
 function setCoins(newTotal) {
@@ -440,6 +460,14 @@ function getCurrentCoins() {
   return 0;
 }
 
+function getCosmetics() {
+  ensurePlayerEconomy();
+  if (!state.player.cosmetics || typeof state.player.cosmetics !== "object") {
+    state.player.cosmetics = { ...DEFAULT_COSMETICS };
+  }
+  return state.player.cosmetics;
+}
+
 // Helpers sencillos que usaremos luego
 export function addCoins(amount) {
   const delta = Number(amount) || 0;
@@ -449,32 +477,56 @@ export function addCoins(amount) {
   checkAchievementsAfterCoins();
 }
 
-export function buyShopItem(itemId) {
+export function canBuyItem(item) {
+  if (!item || item.status !== "available") return false;
+  if (typeof item.tier !== "number") return false;
+
+  if (item.category === "personaje") {
+    return item.tier === getCosmetics().playerStyleLevel + 1;
+  }
+
+  if (item.category === "exterior") {
+    return item.tier === getCosmetics().exteriorStyleLevel + 1;
+  }
+
+  return false;
+}
+
+export function buyProgressionItem(itemId) {
   ensurePlayerEconomy();
   const item = SHOP_ITEMS.find((entry) => entry.id === itemId);
   if (!item) {
     return { success: false, reason: "NOT_FOUND" };
   }
 
-  if (item.status !== "available") {
-    return { success: false, reason: "LOCKED" };
-  }
-
-  if (!Array.isArray(state.player.inventory)) {
-    state.player.inventory = [];
-  }
-
-  if (state.player.inventory.includes(itemId)) {
-    return { success: false, reason: "OWNED" };
+  if (!canBuyItem(item)) {
+    return { success: false, reason: "NOT_ALLOWED" };
   }
 
   const coins = getCurrentCoins();
   if (coins < item.price) {
-    return { success: false, reason: "NO_COINS" };
+    return {
+      success: false,
+      reason: "NO_COINS",
+      missingCoins: item.price - coins,
+    };
   }
 
   setCoins(coins - item.price);
-  state.player.inventory.push(itemId);
+
+  const cosmetics = getCosmetics();
+  if (item.category === "personaje") {
+    cosmetics.playerStyleLevel = Math.max(
+      cosmetics.playerStyleLevel || 1,
+      item.tier
+    );
+  } else if (item.category === "exterior") {
+    cosmetics.exteriorStyleLevel = Math.max(
+      cosmetics.exteriorStyleLevel || 1,
+      item.tier
+    );
+  }
+
   saveGameState();
 
   return { success: true };

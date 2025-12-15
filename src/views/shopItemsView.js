@@ -1,7 +1,7 @@
 import { baseLayout } from "./baseLayout";
 import { uiState } from "../state/uiState";
 import { SHOP_ITEMS } from "../data/shopCatalog";
-import { getState } from "../state/state";
+import { getState, canBuyItem } from "../state/state";
 
 const sectionTitles = {
   exterior: "TIENDA EXTERIOR",
@@ -12,39 +12,61 @@ const sectionTitles = {
 export function shopItemsView() {
   const state = getState();
   const coins = state?.player?.coins ?? state?.currency?.coins ?? 0;
-  const ownedItems = new Set(state?.player?.inventory || []);
   const section = uiState.currentShopSection;
   const title = sectionTitles[section] || "TIENDA";
+  const cosmetics = {
+    playerStyleLevel: state?.player?.cosmetics?.playerStyleLevel || 1,
+    exteriorStyleLevel: state?.player?.cosmetics?.exteriorStyleLevel || 1,
+  };
+
+  const now = Date.now();
+  let headerMessage = "";
+  if (uiState.shopMessage && uiState.shopMessage.expiresAt > now) {
+    headerMessage = `<div class="shop-message">${uiState.shopMessage.text}</div>`;
+  } else if (uiState.shopMessage) {
+    uiState.shopMessage = null;
+  }
 
   const items = SHOP_ITEMS.filter((item) => item.category === section);
   const cards =
     items
       .map((item) => {
-        const locked = item.status === "locked";
-        const owned = ownedItems.has(item.id);
-        const slotInfo =
-          item.category === "personaje" && item.slot
-            ? `<div class="shop-item-slot">Slot: ${item.slot}</div>`
+        const currentLevel = getCurrentLevelForItem(item, cosmetics);
+        const isLockedStatus = item.status === "locked";
+        const isProgressionCategory =
+          item.category === "personaje" || item.category === "exterior";
+        const tierLabel =
+          typeof item.tier === "number"
+            ? `<div class="shop-item-tier">Nivel ${item.tier}</div>`
             : "";
 
         let actionMarkup = "";
-        if (locked) {
+        if (!isProgressionCategory || isLockedStatus) {
           actionMarkup =
             '<div class="shop-item-status shop-item-locked">🔒 BLOQUEADO</div>';
-        } else if (owned) {
+        } else if (item.tier <= currentLevel) {
           actionMarkup =
-            '<div class="shop-item-status shop-item-owned">COMPRADO</div>';
-        } else {
+            '<div class="shop-item-status shop-item-owned">COMPRADO ✅</div>';
+        } else if (canBuyItem(item)) {
           actionMarkup = `<button class="shop-item-buy" data-action="buy-item" data-item-id="${item.id}">
             Comprar · ${item.price} monedas
           </button>`;
+        } else {
+          actionMarkup =
+            '<div class="shop-item-status shop-item-locked">🔒 AÚN NO DISPONIBLE</div>';
         }
 
+        const visualStyle = item.visualAsset
+          ? ` style="background-image: url('${item.visualAsset}')"`
+          : "";
+
         return `
-          <div class="shop-item-card ${locked ? "is-locked" : ""}">
-            <div class="shop-item-visual ${item.visualClass}"></div>
+          <div class="shop-item-card ${
+            isLockedStatus ? "is-locked" : ""
+          } category-${item.category}">
+            <div class="shop-item-visual ${item.visualClass}"${visualStyle}></div>
             <div class="shop-item-name">${item.name}</div>
-            ${slotInfo}
+            ${tierLabel}
             <div class="shop-item-price">${item.price} monedas</div>
             ${actionMarkup}
           </div>
@@ -56,7 +78,10 @@ export function shopItemsView() {
   const leftContent = `
     <div class="shop-items-view">
       <div class="shop-items-header">
-        <div>${title}</div>
+        <div>
+          <div>${title}</div>
+          ${headerMessage}
+        </div>
         <div class="shop-items-balance">MONEDAS: ${coins}</div>
       </div>
       <div class="shop-items-scroll">
@@ -70,4 +95,14 @@ export function shopItemsView() {
   return baseLayout({
     leftContent,
   });
+}
+
+function getCurrentLevelForItem(item, cosmetics) {
+  if (item.category === "personaje") {
+    return cosmetics.playerStyleLevel || 1;
+  }
+  if (item.category === "exterior") {
+    return cosmetics.exteriorStyleLevel || 1;
+  }
+  return 0;
 }

@@ -4,4 +4,6 @@ export const uiState = {
   currentLevel: null,
   currentView: "main", // vista actual
   returnView: null, // vista a la que volver desde menús/overlays
+  shopMessage: null,
+  shopMessageTimer: null,
 };

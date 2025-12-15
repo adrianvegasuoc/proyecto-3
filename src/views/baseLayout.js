@@ -1,9 +1,33 @@
 import { getState } from "../state/state";
 
+const MAX_EXTERIOR_TIER = 14;
+
 export function baseLayout({ leftContent, rightContent = "" }) {
   const state = getState();
   const coins = state?.player?.coins ?? state?.currency?.coins ?? 0;
   const playerName = state?.player?.name || "NUEVO JUGADOR";
+  const cosmetics = state?.player?.cosmetics || {};
+  const playerStyle = Math.max(1, cosmetics.playerStyleLevel || 1);
+  const exteriorStyle = Math.max(1, cosmetics.exteriorStyleLevel || 1);
+  const playerTierClass = `player-tier-${Math.min(playerStyle, 3)}`;
+  const exteriorTierClass = `bg-tier-${Math.min(
+    exteriorStyle,
+    MAX_EXTERIOR_TIER
+  )}`;
+  const defaultRightContent = `
+    <div class="character-visual">
+      <div class="character-background ${exteriorTierClass}"></div>
+      <div class="character-overlay">
+        <span>EXTERIOR NIVEL ${exteriorStyle}</span>
+      </div>
+      <div class="character-avatar ${playerTierClass}">
+        <span>PERSONAJE NIVEL ${playerStyle}</span>
+      </div>
+    </div>
+  `;
+  const hasCustomRightContent = Boolean(rightContent);
+  const panelContent = hasCustomRightContent ? rightContent : defaultRightContent;
+  const rightPanelClass = hasCustomRightContent ? "is-custom" : "is-default";
 
   return `
     <div class="screen">
@@ -37,8 +61,8 @@ export function baseLayout({ leftContent, rightContent = "" }) {
           </aside>
 
           <section class="right-panel">
-            <div class="character-area">
-              ${rightContent || "<p>ESPACIO DE PERSONAJE</p>"}
+            <div class="character-area ${rightPanelClass}">
+              ${panelContent}
             </div>
             <div class="player-info">
                 <span class="player-name">${playerName}</span>

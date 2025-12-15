@@ -18,7 +18,7 @@ import { uiState } from "./state/uiState";
 import { loadGameState, saveGameState } from "./state/persistence";
 import {
   addCoins,
-  buyShopItem,
+  buyProgressionItem,
   completeLevel,
   getState,
   resetState,
@@ -39,6 +39,31 @@ function goTo(viewName) {
   if (viewName === "game") {
     initCurrentGame();
   }
+}
+
+function setShopMessage(text, duration = 2000) {
+  if (uiState.shopMessageTimer) {
+    window.clearTimeout(uiState.shopMessageTimer);
+    uiState.shopMessageTimer = null;
+  }
+
+  if (!text) {
+    uiState.shopMessage = null;
+    return;
+  }
+
+  uiState.shopMessage = {
+    text,
+    expiresAt: Date.now() + duration,
+  };
+
+  uiState.shopMessageTimer = window.setTimeout(() => {
+    uiState.shopMessage = null;
+    uiState.shopMessageTimer = null;
+    if (uiState.currentView === "shopItems") {
+      goTo("shopItems");
+    }
+  }, duration);
 }
 
 function setupNavigation() {
@@ -82,13 +107,20 @@ function setupNavigation() {
       const itemId = buyButton.getAttribute("data-item-id");
       if (!itemId) return;
 
-      const result = buyShopItem(itemId);
+      const result = buyProgressionItem(itemId);
       if (result?.success) {
+        setShopMessage(null);
         goTo(uiState.currentView || "shopItems");
       } else {
         if (result?.reason === "NO_COINS") {
-          window.alert("No tienes suficientes monedas.");
+          const missing = Math.max(0, result?.missingCoins || 0);
+          setShopMessage(`💸 Te faltan ${missing} monedas`);
+        } else if (result?.reason === "NOT_ALLOWED") {
+          setShopMessage("🔒 Aún no puedes comprar este nivel");
+        } else {
+          setShopMessage("Compra no disponible");
         }
+        goTo("shopItems");
         console.warn("Compra no disponible:", result?.reason || "unknown");
       }
       return;
