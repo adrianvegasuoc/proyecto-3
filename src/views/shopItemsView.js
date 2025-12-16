@@ -10,6 +10,7 @@ const sectionTitles = {
 };
 
 export function shopItemsView() {
+  const BASE = import.meta.env.BASE_URL || "/";
   const state = getState();
   const coins = state?.player?.coins ?? state?.currency?.coins ?? 0;
   const section = uiState.currentShopSection;
@@ -56,8 +57,12 @@ export function shopItemsView() {
             '<div class="shop-item-status shop-item-locked">🔒 AÚN NO DISPONIBLE</div>';
         }
 
-        const visualStyle = item.visualAsset
-          ? ` style="background-image: url('${item.visualAsset}')"`
+        const assetPath =
+          typeof item.visualAsset === "string"
+            ? item.visualAsset.replace(/^\/+/, "")
+            : "";
+        const visualStyle = assetPath
+          ? ` style="background-image: url('${BASE}${assetPath}')"`
           : "";
 
         return `

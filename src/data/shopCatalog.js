@@ -27,7 +27,7 @@ const exteriorItems = EXTERIOR_WORLDS.flatMap(
         price,
         status: locked ? "locked" : "available",
         visualClass: "shop-visual-exterior",
-        visualAsset: `/assets/games/background/world_${worldId}/background_${levelNumber}.jpg`,
+        visualAsset: `assets/games/background/world_${worldId}/background_${levelNumber}.jpg`,
       };
     })
 );
@@ -54,7 +54,7 @@ const characterItems = CHARACTER_ITEMS_DEFINITION.map(
     status: locked ? "locked" : "available",
     slot: "full",
     visualClass: "shop-visual-character",
-    visualAsset: `/assets/shop/player/player_${assetIndex}.png`,
+    visualAsset: `assets/shop/player/player_${assetIndex}.png`,
   })
 );
 

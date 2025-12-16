@@ -11,6 +11,7 @@ const worldTitles = {
 export function gameView() {
   const worldId = uiState.currentWorld;
   const level = uiState.currentLevel;
+  const BASE = import.meta.env.BASE_URL || "/";
 
   const worldTitle = worldTitles[worldId] || "MUNDO";
   const levelText = level ? `NIVEL ${level}` : "SIN NIVEL SELECCIONADO";
@@ -45,8 +46,10 @@ export function gameView() {
     </div>
   `;
 
+    const digitalBackground = `${BASE}assets/games/background/world_digital/background_1.jpg`;
+
     const rightContent = `
-    <div class="digital-game-root">
+    <div class="digital-game-root" style="background-image: url('${digitalBackground}')">
       <div id="digital-game-panel"></div>
     </div>
   `;

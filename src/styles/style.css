@@ -266,77 +266,6 @@ body {
   font-weight: bold;
 }
 
-.bg-tier-1 {
-  background-image: url("/assets/games/background/world_digital/background_1.jpg");
-}
-
-.bg-tier-2 {
-  background-image: url("/assets/games/background/world_digital/background_2.jpg");
-}
-
-.bg-tier-3 {
-  background-image: url("/assets/games/background/world_digital/background_3.jpg");
-}
-
-.bg-tier-4 {
-  background-image: url("/assets/games/background/world_html/background_1.jpg");
-}
-
-.bg-tier-5 {
-  background-image: url("/assets/games/background/world_html/background_2.jpg");
-}
-
-.bg-tier-6 {
-  background-image: url("/assets/games/background/world_html/background_3.jpg");
-}
-
-.bg-tier-7 {
-  background-image: url("/assets/games/background/world_css/background_1.jpg");
-}
-
-.bg-tier-8 {
-  background-image: url("/assets/games/background/world_css/background_2.jpg");
-}
-
-.bg-tier-9 {
-  background-image: url("/assets/games/background/world_css/background_3.jpg");
-}
-
-.bg-tier-10 {
-  background-image: url("/assets/games/background/world_css/background_4.jpg");
-}
-
-.bg-tier-11 {
-  background-image: url("/assets/games/background/world_logica/background_1.jpg");
-}
-
-.bg-tier-12 {
-  background-image: url("/assets/games/background/world_logica/background_2.jpg");
-}
-
-.bg-tier-13 {
-  background-image: url("/assets/games/background/world_logica/background_3.jpg");
-}
-
-.bg-tier-14 {
-  background-image: url("/assets/games/background/world_logica/background_4.jpg");
-}
-
-.player-tier-1 {
-  background-image: url("/assets/shop/player/player_1.png");
-}
-
-.player-tier-2 {
-  background-image: url("/assets/shop/player/player_2.png");
-}
-
-.player-tier-3 {
-  background-image: url("/assets/shop/player/player_3.png");
-}
-
-.player-tier-4 {
-  background-image: url("/assets/shop/player/player_4.png");
-}
 
 .player-info {
   border: 1px solid #ddd;
@@ -692,9 +621,7 @@ body {
   border-radius: 6px;
   overflow: hidden;
   border: 1px solid #111;
-  background: #000
-    url("/assets/games/background/world_digital/background_1.jpg") center/cover
-    no-repeat;
+  background-color: #000;
 }
 
 .digital-game {
@@ -876,9 +803,7 @@ body {
   border-radius: 6px;
   overflow: hidden;
   border: 1px solid #111;
-  background: #000
-    url("/assets/games/background/world_digital/background_1.jpg") center/cover
-    no-repeat;
+  background-color: #000;
 }
 
 .digital-game {
