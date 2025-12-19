@@ -110,6 +110,11 @@ body {
   transform: translateY(-1px);
 }
 
+.action-btn.is-active {
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: var(--radius);
+}
+
 .action-btn:active .action-btn__icon {
   transform: translateY(0);
 }

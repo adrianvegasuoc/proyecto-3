@@ -1,4 +1,5 @@
 import { getState } from "../state/state";
+import { uiState } from "../state/uiState";
 
 const MAX_EXTERIOR_TIER = 14;
 const MAX_PLAYER_TIER_VISUAL = 4;
@@ -77,7 +78,9 @@ export function baseLayout({ leftContent, rightContent = "" }) {
         <div class="main-row">
           <aside class="left-panel">
             <div class="nav-circles">
-              <button class="action-btn" data-view="main" title="Jugar">
+              <button class="action-btn ${
+                uiState.currentView === "main" ? "is-active" : ""
+              }" data-view="main" title="Jugar">
                 <img
                   class="action-btn__icon"
                   src="${BASE}assets/menu/menu_game.png"
@@ -85,7 +88,9 @@ export function baseLayout({ leftContent, rightContent = "" }) {
                 />
                 <span class="action-btn__label">JUGAR</span>
               </button>
-              <button class="action-btn" data-view="medals" title="Medallero">
+              <button class="action-btn ${
+                uiState.currentView === "medals" ? "is-active" : ""
+              }" data-view="medals" title="Medallero">
                 <img
                   class="action-btn__icon"
                   src="${BASE}assets/menu/menu_star.png"
@@ -93,7 +98,9 @@ export function baseLayout({ leftContent, rightContent = "" }) {
                 />
                 <span class="action-btn__label">MEDALLERO</span>
               </button>
-              <button class="action-btn" data-view="shop" title="Tienda">
+              <button class="action-btn ${
+                uiState.currentView === "shop" ? "is-active" : ""
+              }" data-view="shop" title="Tienda">
                 <img
                   class="action-btn__icon"
                   src="${BASE}assets/menu/menu_coin.png"
@@ -101,7 +108,9 @@ export function baseLayout({ leftContent, rightContent = "" }) {
                 />
                 <span class="action-btn__label">TIENDA</span>
               </button>
-              <button class="action-btn" data-view="stats" title="Estadísticas">
+              <button class="action-btn ${
+                uiState.currentView === "stats" ? "is-active" : ""
+              }" data-view="stats" title="Estadísticas">
                 <img
                   class="action-btn__icon"
                   src="${BASE}assets/menu/menu_stats.png"
