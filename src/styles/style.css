@@ -621,7 +621,9 @@ body {
   border-radius: 6px;
   overflow: hidden;
   border: 1px solid #111;
-  background-color: #000;
+  background: #000
+    url("/assets/games/background/world_digital/background_1.jpg") center/cover
+    no-repeat;
 }
 
 .digital-game {
@@ -803,7 +805,9 @@ body {
   border-radius: 6px;
   overflow: hidden;
   border: 1px solid #111;
-  background-color: #000;
+  background: #000
+    url("/assets/games/background/world_digital/background_1.jpg") center/cover
+    no-repeat;
 }
 
 .digital-game {
