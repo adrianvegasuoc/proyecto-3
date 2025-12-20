@@ -163,7 +163,7 @@ function setupNavigation() {
       const level = uiState.currentLevel;
       if (!worldId || !level) return;
 
-      addCoins(20);
+      addCoins(50);
       completeLevel(worldId, level);
       saveGameState();
       goTo("worldDetail");
